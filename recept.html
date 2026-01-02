@@ -16,72 +16,73 @@
             max-width: 850px; margin: 40px auto; 
             background: rgba(255, 255, 255, 0.9); 
             backdrop-filter: blur(15px);
-            border-radius: 30px; padding: 0; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.07); 
+            border-radius: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.07); 
             overflow: hidden; position: relative; 
         }
 
         .recipe-img { width: 100%; height: 450px; object-fit: cover; border-bottom: 5px solid #fce7f3; }
-        
         .content { padding: 40px; }
+        .back-link { color: #8b5cf6; font-weight: 600; text-decoration: none; display: inline-block; margin-bottom: 25px; }
+
+        h1 { font-family: 'Playfair Display', serif; font-size: 42px; color: #1f2937; margin: 0; }
+        .tag { background: #fdf2f8; color: #ec4899; padding: 5px 15px; border-radius: 20px; font-size: 13px; font-weight: 600; display: inline-block; margin-top: 10px; }
+
+        h3 { font-family: 'Playfair Display', serif; font-size: 26px; color: #8b5cf6; margin-top: 40px; }
+
+        /* Interactieve Ingrediëntenlijst */
+        .ingredient-item { display: flex; align-items: center; margin-bottom: 10px; cursor: pointer; transition: 0.2s; }
+        .ingredient-item input { margin-right: 15px; width: 20px; height: 20px; cursor: pointer; accent-color: #8b5cf6; }
+        .ingredient-item.checked { text-decoration: line-through; opacity: 0.5; }
+
+        .instructions-text { line-height: 1.9; font-size: 17px; white-space: pre-wrap; }
+
+        /* De Verbeterde Slider */
+        .rating-section { margin-top: 50px; text-align: center; padding: 40px; background: white; border-top: 1px solid #eee; }
         
-        .back-link { color: #8b5cf6; font-weight: 600; text-decoration: none; display: inline-block; margin-bottom: 25px; transition: 0.3s; }
-        .back-link:hover { transform: translateX(-5px); color: #ec4899; }
-
-        h1 { 
-            font-family: 'Playfair Display', serif; 
-            font-size: 42px; color: #1f2937; margin: 0 0 10px 0; 
-            line-height: 1.1;
+        .slider-wrapper { 
+            position: relative; 
+            width: 85%; 
+            max-width: 400px; 
+            margin: 60px auto 40px auto; 
         }
 
-        .meta-tags { display: flex; gap: 15px; margin-bottom: 30px; }
-        .tag { background: #f3f4f6; padding: 5px 15px; border-radius: 20px; font-size: 13px; font-weight: 600; color: #6b7280; text-transform: uppercase; }
-        .tag-chef { background: #fdf2f8; color: #ec4899; }
-
-        h3 { 
-            font-family: 'Playfair Display', serif; 
-            font-size: 26px; color: #8b5cf6; 
-            margin-top: 40px; margin-bottom: 15px;
-            display: flex; align-items: center;
-        }
-        h3::after { content: ""; flex: 1; height: 1px; background: #e5e7eb; margin-left: 15px; }
-
-        /* Mooiere tekstblokken */
-        .ingredients-list { 
-            background: #fff; border-radius: 20px; padding: 25px;
-            border: 1px solid #f3f4f6; line-height: 1.8; font-size: 16px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
-        }
-        
-        .instructions-text { 
-            line-height: 1.9; font-size: 17px; color: #4b5563;
-            white-space: pre-wrap; padding: 10px 0;
+        /* De balk zelf */
+        input[type="range"] { 
+            -webkit-appearance: none; 
+            width: 100%; 
+            height: 10px; 
+            border-radius: 5px; 
+            background: #e5e7eb; 
+            outline: none; 
         }
 
-        /* De Rating Slider */
-        .rating-section { 
-            margin-top: 50px; text-align: center; padding: 40px; 
-            background: linear-gradient(to bottom, #ffffff, #fafafa); 
-            border-top: 1px solid #eee; 
+        /* Onzichtbare knop zodat je de emoji kunt slepen */
+        input[type="range"]::-webkit-slider-thumb { 
+            -webkit-appearance: none; 
+            width: 50px; 
+            height: 50px; 
+            cursor: grab; 
         }
-        
-        .slider-wrapper { position: relative; width: 80%; max-width: 400px; margin: 60px auto 30px auto; }
-        input[type="range"] { -webkit-appearance: none; width: 100%; height: 8px; border-radius: 5px; background: #ddd; outline: none; }
-        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 50px; height: 50px; cursor: grab; }
-        #emoji-display { position: absolute; top: -55px; font-size: 45px; transition: left 0.1s; transform: translateX(-50%); }
+
+        /* De Emoji die PRECIES op de lijn staat */
+        #emoji-display { 
+            position: absolute; 
+            top: -20px; /* Precies goed geplaatst */
+            font-size: 45px; 
+            transition: left 0.1s ease-out; 
+            transform: translateX(-50%); 
+            pointer-events: none;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
 
         .send-score-btn {
             background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
             color: white; border: none; padding: 16px 35px; border-radius: 30px; 
-            font-weight: 600; cursor: pointer; transition: 0.3s; box-shadow: 0 10px 20px rgba(139, 92, 246, 0.2);
+            font-weight: 600; cursor: pointer; box-shadow: 0 10px 20px rgba(139, 92, 246, 0.2);
         }
-        .send-score-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 25px rgba(139, 92, 246, 0.3); }
 
-        .edit-btn { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.8); border: none; padding: 10px 20px; border-radius: 25px; font-weight: 600; cursor: pointer; backdrop-filter: blur(5px); }
-
-        /* Bewerken velden */
-        #editMode label { font-weight: 600; margin-top: 20px; display: block; color: #8b5cf6; }
-        input, textarea { width: 100%; padding: 15px; margin-top: 8px; border: 1px solid #e5e7eb; border-radius: 12px; font-family: 'Poppins', sans-serif; font-size: 15px; }
+        .edit-btn { position: absolute; top: 20px; right: 20px; background: white; border: none; padding: 10px 20px; border-radius: 25px; font-weight: 600; cursor: pointer; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        textarea, input[type="text"], input[type="url"] { width: 100%; padding: 15px; margin-top: 10px; border: 1px solid #ddd; border-radius: 12px; }
     </style>
 </head>
 <body>
@@ -92,49 +93,45 @@
     <div id="viewMode">
         <div id="recipeImage"></div>
         <div class="content">
-            <a href="index.html" class="back-link">← Terug naar overzicht</a>
-            
+            <a href="index.html" class="back-link">← Terug</a>
             <h1 id="title">Laden...</h1>
-            <div class="meta-tags" id="metaTags"></div>
+            <div id="chefTag" class="tag"></div>
             
             <h3>Ingrediënten</h3>
-            <div id="ingredients" class="ingredients-list"></div>
+            <div id="ingredientsList"></div>
 
             <h3>Bereidingswijze</h3>
             <div id="instructions" class="instructions-text"></div>
 
-            <div class="rating-section" id="ratingSection">
-                <h4 style="font-family: 'Playfair Display', serif; font-size: 24px;">Hoe smaakt het?</h4>
+            <div class="rating-section">
+                <h4 style="font-family: 'Playfair Display'; font-size: 24px;">Hoe smaakt het?</h4>
                 <div class="slider-wrapper">
                     <div id="emoji-display">😐</div>
                     <input type="range" id="scoreSlider" min="0" max="5" step="0.1" value="2.5">
                 </div>
-                <p id="currentVal" style="font-weight: 600; font-size: 20px; margin-bottom: 25px;">Score: 2.5</p>
+                <p id="currentVal" style="font-weight: 600; font-size: 20px;">Score: 2.5</p>
                 <button id="submitBtn" class="send-score-btn" onclick="submitRating()">Verstuur Oordeel 🚀</button>
-                <p id="alreadyVoted" style="display:none; color:#8b5cf6; font-weight:600; margin-top:20px;">Je hebt je oordeel al gegeven! ✨</p>
-                
-                <p id="avgDisplay" style="margin-top:30px; font-size:16px; font-weight:600; color:#9ca3af;"></p>
+                <p id="alreadyVoted" style="display:none; color:#8b5cf6; font-weight:600;">Je hebt al gestemd! ✨</p>
+                <p id="avgDisplay" style="margin-top:20px; font-size:14px; color:#9ca3af;"></p>
             </div>
         </div>
     </div>
 
     <div id="editMode" class="content" style="display:none;">
-        <h2 style="font-family: 'Playfair Display', serif; font-size: 32px;">Recept Aanpassen</h2>
-        <label>Titel</label><input type="text" id="editTitle">
-        <label>Chef</label><input type="text" id="editChef">
-        <label>Ingrediënten</label><textarea id="editIngredients" rows="6"></textarea>
-        <label>Bereiding</label><textarea id="editInstructions" rows="10"></textarea>
-        <label>Foto URL</label><input type="url" id="editPhoto">
-        
-        <button style="background: #10b981; color:white; border:none; padding:15px; border-radius:12px; width:100%; font-weight:600; margin-top:30px; cursor:pointer;" onclick="saveChanges()">Opslaan ✅</button>
-        <button style="background: #fee2e2; color:#ef4444; border:none; padding:12px; border-radius:12px; width:100%; font-weight:600; margin-top:15px; cursor:pointer;" onclick="deleteRecipe()">🗑️ Verwijder Recept</button>
+        <h2>Aanpassen</h2>
+        <input type="text" id="editTitle" placeholder="Titel">
+        <input type="text" id="editChef" placeholder="Chef">
+        <textarea id="editIngredients" rows="6" placeholder="Ingrediënten (elke regel is een nieuw item)"></textarea>
+        <textarea id="editInstructions" rows="10" placeholder="Bereiding"></textarea>
+        <input type="url" id="editPhoto" placeholder="Foto URL">
+        <button class="send-score-btn" style="width:100%; margin-top:20px;" onclick="saveChanges()">Opslaan ✅</button>
         <button style="background:none; border:none; color:#9ca3af; cursor:pointer; width:100%; margin-top:15px;" onclick="toggleEdit()">Annuleren</button>
     </div>
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, doc, getDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyBzsxSTQKhhh8yKb4AFew7zQz26BMNKfHw",
@@ -151,7 +148,6 @@
 
     const slider = document.getElementById('scoreSlider');
     const emojiDisplay = document.getElementById('emoji-display');
-    const valText = document.getElementById('currentVal');
 
     function getEmoji(val) {
         if (val < 1.0) return "💩";
@@ -166,7 +162,7 @@
         const val = parseFloat(slider.value);
         emojiDisplay.style.left = `${(val / 5) * 100}%`;
         emojiDisplay.innerText = getEmoji(val);
-        valText.innerText = `Score: ${val}`;
+        document.getElementById('currentVal').innerText = `Score: ${val}`;
     });
 
     async function load() {
@@ -174,16 +170,27 @@
         if (snap.exists()) {
             const r = snap.data();
             document.getElementById('title').innerText = r.titel;
-            document.getElementById('metaTags').innerHTML = `
-                <span class="tag tag-chef">👨‍🍳 Chef ${r.chef}</span>
-                <span class="tag">🍴 ${r.type}</span>
-            `;
-            document.getElementById('ingredients').innerText = r.ingredienten;
+            document.getElementById('chefTag').innerText = `👨‍🍳 Chef ${r.chef}`;
             document.getElementById('instructions').innerText = r.bereiding;
-            document.getElementById('recipeImage').innerHTML = r.foto ? `<img src="${r.foto}" class="recipe-img">` : `<div style="height:100px;"></div>`;
-            
+            document.getElementById('recipeImage').innerHTML = r.foto ? `<img src="${r.foto}" class="recipe-img">` : ``;
+
+            // Ingrediënten omzetten naar vinklijst
+            const ingrContainer = document.getElementById('ingredientsList');
+            const lines = r.ingredienten.split('\n');
+            ingrContainer.innerHTML = "";
+            lines.forEach(line => {
+                if(line.trim() !== "") {
+                    const div = document.createElement('div');
+                    div.className = 'ingredient-item';
+                    div.innerHTML = `<input type="checkbox"> <span>${line}</span>`;
+                    div.onclick = function() { this.classList.toggle('checked'); };
+                    ingrContainer.appendChild(div);
+                }
+            });
+
+            // Score UI
             const avg = r.gemiddeldeScore || 0;
-            document.getElementById('avgDisplay').innerText = `Gemiddelde: ${getEmoji(avg)} ${avg} / 5 (${r.aantalStemmen || 0} stemmen)`;
+            document.getElementById('avgDisplay').innerText = `Totaal gemiddelde: ${getEmoji(avg)} ${avg}`;
             
             if (localStorage.getItem('voted_' + id)) {
                 document.getElementById('submitBtn').style.display = 'none';
@@ -191,7 +198,6 @@
                 slider.disabled = true;
             }
 
-            // Edit fields
             document.getElementById('editTitle').value = r.titel;
             document.getElementById('editChef').value = r.chef;
             document.getElementById('editIngredients').value = r.ingredienten;
@@ -201,7 +207,6 @@
     }
 
     window.submitRating = async () => {
-        document.getElementById('submitBtn').disabled = true;
         const newScore = parseFloat(slider.value);
         const docRef = doc(db, "recepten", id);
         const snap = await getDoc(docRef);
@@ -210,11 +215,7 @@
         const stemmen = (r.aantalStemmen || 0) + 1;
         const gemiddelde = (totaal / stemmen).toFixed(1);
 
-        await updateDoc(docRef, {
-            totaalScores: totaal,
-            aantalStemmen: stemmen,
-            gemiddeldeScore: parseFloat(gemiddelde)
-        });
+        await updateDoc(docRef, { totaalScores: totaal, aantalStemmen: stemmen, gemiddeldeScore: parseFloat(gemiddelde) });
         localStorage.setItem('voted_' + id, 'true');
         location.reload();
     };
@@ -235,13 +236,6 @@
             foto: document.getElementById('editPhoto').value
         });
         location.reload();
-    };
-
-    window.deleteRecipe = async () => {
-        if(confirm("Dit recept definitief verwijderen?")) {
-            await deleteDoc(doc(db, "recepten", id));
-            window.location.href = "index.html";
-        }
     };
 
     load();
