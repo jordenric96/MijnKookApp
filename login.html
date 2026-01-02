@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inloggen - Mijn Kook App</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f4; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+        .card { background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        h2 { color: #ff5722; text-align: center; margin-bottom: 1rem; }
+        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
+        button { width: 100%; padding: 12px; background: #ff5722; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; margin-top: 10px; }
+        button:hover { background: #e64a19; }
+        
+        /* Avatar Sectie */
+        .avatar-section-title { margin: 15px 0 5px 0; font-weight: bold; font-size: 0.9em; color: #555; }
+        .avatar-grid { 
+            display: grid; 
+            grid-template-columns: repeat(5, 1fr); 
+            gap: 8px; 
+            margin-bottom: 15px; 
+            background: #fff3e0; 
+            padding: 12px; 
+            border-radius: 10px; 
+            max-height: 160px; 
+            overflow-y: auto; 
+            border: 1px solid #ffccbc;
+        }
+        .avatar-option { 
+            font-size: 28px; 
+            cursor: pointer; 
+            text-align: center;
+            border-radius: 50%; 
+            padding: 5px; 
+            transition: 0.2s;
+            border: 2px solid transparent;
+            user-select: none;
+        }
+        .avatar-option:hover { background: white; transform: scale(1.1); }
+        .selected { border-color: #ff5722 !important; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        
+        .toggle-text { text-align: center; font-size: 0.85em; color: #666; margin-top: 20px; cursor: pointer; text-decoration: underline; }
+        #registrationFields { display: block; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2 id="formTitle">Account aanmaken</h2>
+    
+    <div id="registrationFields">
+        <p class="avatar-section-title">Kies je Chef Avatar:</p>
+        <div class="avatar-grid" id="avatarPicker">
+            </div>
+        <input type="text" id="username" placeholder="Gebruikersnaam">
+    </div>
+
+    <input type="email" id="email" placeholder="E-mailadres">
+    <input type="password" id="password" placeholder="Wachtwoord">
+    
+    <button id="mainBtn">Registreren</button>
+    
+    <p class="toggle-text" id="toggleLink" onclick="toggleMode()">Al een account? Log hier in</p>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDYOSyYeOLfoyxiKFQPZJmiCjTDG2Slc4g",
+        authDomain: "mijnkookapp.firebaseapp.com",
+        projectId: "mijnkookapp",
+        storageBucket: "mijnkookapp.firebasestorage.app",
+        messagingSenderId: "212986854940",
+        appId: "1:212986854940:web:f13e0cc5489224791fe9d9",
+        measurementId: "G-E6V3410YVP"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Uitgebreide lijst met avatars
+    const avatars = [
+        '👨‍🍳', '👩‍🍳', '🧑‍🍳', '🍳', '🍕', '🍔', '🌮', 'Sushi', '🍣', '🍰', 
+        '🍩', '🥦', '🍓', '🥑', '🌶️', '🍪', '🍎', '🍍', '🍄', '🥐', 
+        '🍗', '🐱‍🍳', '🐻', '🐼', '🦊', '🐷', '🐸', '🐹', '🦁', '🐯'
+    ];
+
+    let selectedAvatar = '👨‍🍳';
+    let isLoginMode = false;
+
+    // Laad alle avatars in de grid
+    const picker = document.getElementById('avatarPicker');
+    avatars.forEach((emoji, index) => {
+        const span = document.createElement('span');
+        span.innerText = emoji;
+        span.className = 'avatar-option' + (emoji === selectedAvatar ? ' selected' : '');
+        span.onclick = () => {
+            selectedAvatar = emoji;
+            document.querySelectorAll('.avatar-option').forEach(opt => opt.classList.remove('selected'));
+            span.classList.add('selected');
+        };
+        picker.appendChild(span);
+    });
+
+    // Wissel-functie
+    window.toggleMode = () => {
+        isLoginMode = !isLoginMode;
+        document.getElementById('formTitle').innerText = isLoginMode ? "Inloggen" : "Account aanmaken";
+        document.getElementById('registrationFields').style.display = isLoginMode ? "none" : "block";
+        document.getElementById('mainBtn').innerText = isLoginMode ? "Inloggen" : "Registreren";
+        document.getElementById('toggleLink').innerText = isLoginMode ? "Nog geen account? Maak er een aan" : "Al een account? Log hier in";
+    };
+
+    // Knop actie
+    document.getElementById('mainBtn').onclick = async () => {
+        const email = document.getElementById('email').value;
+        const pass = document.getElementById('password').value;
+        const name = document.getElementById('username').value;
+
+        if(!email || !pass) { alert("Vul e-mail en wachtwoord in"); return; }
+
+        try {
+            if (isLoginMode) {
+                await signInWithEmailAndPassword(auth, email, pass);
+                window.location.href = "index.html";
+            } else {
+                if(!name) { alert("Kies een gebruikersnaam"); return; }
+                const userCred = await createUserWithEmailAndPassword(auth, email, pass);
+                
+                // Opslaan in database
+                await setDoc(doc(db, "users", userCred.user.uid), {
+                    username: name,
+                    avatar: selectedAvatar,
+                    rol: "user"
+                });
+                
+                alert("Welkom, Chef " + name + "!");
+                window.location.href = "index.html";
+            }
+        } catch (e) {
+            alert("Fout: " + e.message);
+        }
+    };
+</script>
+
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nieuw Recept - Mijn Kook App</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #fdfdfd; margin: 0; padding: 20px; }
+        .form-card { max-width: 600px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); }
+        h2 { color: #ff5722; margin-top: 0; }
+        label { display: block; margin-top: 15px; font-weight: bold; color: #555; }
+        input, textarea, select { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
+        textarea { resize: vertical; }
+        .btn-save { width: 100%; padding: 15px; background: #ff5722; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 18px; margin-top: 25px; transition: 0.3s; }
+        .btn-save:hover { background: #e64a19; }
+        .btn-save:disabled { background: #ccc; cursor: not-allowed; }
+        #loading { display: none; color: #ff5722; font-weight: bold; text-align: center; margin-top: 10px; }
+        .nav-back { margin-bottom: 20px; display: inline-block; text-decoration: none; color: #ff5722; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="form-card">
+    <a href="index.html" class="nav-back">← Terug naar overzicht</a>
+    <h2>Nieuw Recept Delen</h2>
+    
+    <form id="recipeForm">
+        <label for="title">Naam van het gerecht</label>
+        <input type="text" id="title" placeholder="Bijv. Oma's Appeltaart" required>
+
+        <label for="servings">Aantal personen</label>
+        <input type="number" id="servings" placeholder="Bijv. 4" required>
+
+        <label for="ingredients">Ingrediënten</label>
+        <textarea id="ingredients" rows="5" placeholder="Lijst de ingrediënten op..." required></textarea>
+
+        <label for="instructions">Bereidingswijze</label>
+        <textarea id="instructions" rows="8" placeholder="Stap voor stap uitleg..." required></textarea>
+
+        <label for="photo">Foto van het resultaat</label>
+        <input type="file" id="photo" accept="image/*" required>
+
+        <button type="submit" id="submitBtn" class="btn-save">Recept Online Zetten</button>
+        <div id="loading">Bezig met koken... (recept uploaden)</div>
+    </form>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDYOSyYeOLfoyxiKFQPZJmiCjTDG2Slc4g",
+        authDomain: "mijnkookapp.firebaseapp.com",
+        projectId: "mijnkookapp",
+        storageBucket: "mijnkookapp.firebasestorage.app",
+        messagingSenderId: "212986854940",
+        appId: "1:212986854940:web:f13e0cc5489224791fe9d9",
+        measurementId: "G-E6V3410YVP"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
+
+    let currentUserData = null;
+
+    // Controleer inlogstatus
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            const userDoc = await getDoc(doc(db, "users", user.uid));
+            if (userDoc.exists()) {
+                currentUserData = userDoc.data();
+            }
+        } else {
+            window.location.href = "login.html";
+        }
+    });
+
+    const form = document.getElementById('recipeForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const loadingMsg = document.getElementById('loading');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        if (!currentUserData) return alert("Wacht tot je profiel geladen is...");
+
+        submitBtn.disabled = true;
+        loadingMsg.style.display = "block";
+
+        const file = document.getElementById('photo').files[0];
+        const title = document.getElementById('title').value;
+
+        try {
+            // 1. Upload foto naar Firebase Storage
+            const storageRef = ref(storage, 'recepten/' + Date.now() + "_" + file.name);
+            const snapshot = await uploadBytes(storageRef, file);
+            const photoUrl = await getDownloadURL(snapshot.ref);
+
+            // 2. Recept data opslaan in Firestore
+            await addDoc(collection(db, "recepten"), {
+                titel: title,
+                personen: document.getElementById('servings').value,
+                ingredienten: document.getElementById('ingredients').value,
+                bereiding: document.getElementById('instructions').value,
+                foto: photoUrl,
+                auteur: currentUserData.username,
+                auteurAvatar: currentUserData.avatar,
+                auteurId: auth.currentUser.uid,
+                datum: new Date(),
+                gemiddeldeScore: 0,
+                aantalReviews: 0
+            });
+
+            alert("Je recept staat online!");
+            window.location.href = "index.html";
+
+        } catch (error) {
+            console.error(error);
+            alert("Er ging iets mis: " + error.message);
+            submitBtn.disabled = false;
+            loadingMsg.style.display = "none";
+        }
+    });
+</script>
+
+</body>
+</html>

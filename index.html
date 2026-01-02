@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mijn Kook App - Overzicht</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background: #f9f9f9; }
+        nav { background: #ff5722; color: white; padding: 1rem; display: flex; justify-content: space-between; align-items: center; }
+        .container { padding: 20px; max-width: 1200px; margin: auto; }
+        .user-info { display: flex; align-items: center; gap: 10px; }
+        .avatar { font-size: 24px; background: white; border-radius: 50%; padding: 5px; }
+        .search-bar { width: 100%; padding: 12px; margin: 20px 0; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; }
+        .recipe-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+        .btn { background: white; color: #ff5722; padding: 8px 15px; text-decoration: none; border-radius: 5px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="user-info" id="userInfo">
+        <span>Laden...</span>
+    </div>
+    <div>
+        <a href="toevoegen.html" class="btn">＋ Nieuw Recept</a>
+        <button onclick="logout()" style="margin-left:10px; cursor:pointer;">Uitloggen</button>
+    </div>
+</nav>
+
+<div class="container">
+    <input type="text" class="search-bar" id="searchInput" placeholder="Zoek op gerecht, ingrediënt of score (bv. 4*)...">
+    
+    <h2>Alle Recepten</h2>
+    <div class="recipe-grid" id="recipeGrid">
+        <p>Er zijn nog geen recepten toegevoegd.</p>
+    </div>
+</div>
+
+<script type="module">
+    // Firebase imports
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    // Jouw unieke configuratie
+    const firebaseConfig = {
+        apiKey: "AIzaSyDYOSyYeOLfoyxiKFQPZJmiCjTDG2Slc4g",
+        authDomain: "mijnkookapp.firebaseapp.com",
+        projectId: "mijnkookapp",
+        storageBucket: "mijnkookapp.firebasestorage.app",
+        messagingSenderId: "212986854940",
+        appId: "1:212986854940:web:f13e0cc5489224791fe9d9",
+        measurementId: "G-E6V3410YVP"
+    };
+
+    // Initialiseer Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Controleer of gebruiker is ingelogd
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            // Haal gebruikersnaam en avatar op uit Firestore
+            const userDoc = await getDoc(doc(db, "users", user.uid));
+            if (userDoc.exists()) {
+                const userData = userDoc.data();
+                document.getElementById('userInfo').innerHTML = `
+                    <span class="avatar">${userData.avatar}</span>
+                    <span>Hoi, <b>${userData.username}</b>!</span>
+                `;
+            }
+        } else {
+            // Niet ingelogd? Stuur naar login pagina
+            window.location.href = "login.html";
+        }
+    });
+
+    // Uitlog functie beschikbaar maken voor de knop
+    window.logout = () => {
+        signOut(auth).then(() => {
+            window.location.href = "login.html";
+        });
+    };
+</script>
+
+</body>
+</html>
