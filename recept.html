@@ -22,38 +22,48 @@
 
         .recipe-img { width: 100%; height: 450px; object-fit: cover; border-bottom: 5px solid #fce7f3; }
         .content { padding: 40px; }
-        .back-link { color: #8b5cf6; font-weight: 600; text-decoration: none; display: inline-block; margin-bottom: 25px; }
+        
+        h1 { font-family: 'Playfair Display', serif; font-size: 42px; color: #1f2937; margin-bottom: 10px; }
+        .tag { background: #fdf2f8; color: #ec4899; padding: 5px 15px; border-radius: 20px; font-size: 13px; font-weight: 600; display: inline-block; }
 
-        h1 { font-family: 'Playfair Display', serif; font-size: 42px; color: #1f2937; margin: 0; }
-        .meta-info { display: flex; align-items: center; gap: 15px; margin-top: 15px; flex-wrap: wrap; }
-        .tag { background: #fdf2f8; color: #ec4899; padding: 5px 15px; border-radius: 20px; font-size: 13px; font-weight: 600; }
-
-        /* Personen Selector */
-        .servings-control {
-            display: flex; align-items: center; gap: 10px;
-            background: #f3f4f6; padding: 10px 20px; border-radius: 25px; margin-top: 20px; width: fit-content;
+        /* Personen Calculator Styling */
+        .calculator-box {
+            background: #fff;
+            padding: 20px;
+            border-radius: 20px;
+            margin: 30px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid #f0f0f0;
         }
-        .servings-btn { background: white; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-weight: bold; color: #8b5cf6; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .calc-controls { display: flex; align-items: center; gap: 15px; }
+        .calc-btn { 
+            width: 40px; height: 40px; border-radius: 50%; border: none; 
+            background: #8b5cf6; color: white; font-size: 20px; cursor: pointer;
+            transition: 0.2s;
+        }
+        .calc-btn:hover { background: #ec4899; }
+        #servingsDisplay { font-size: 24px; font-weight: 600; min-width: 30px; text-align: center; }
 
         h3 { font-family: 'Playfair Display', serif; font-size: 26px; color: #8b5cf6; margin-top: 40px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
 
-        /* Ingrediëntenlijst */
-        .ingredient-item { display: flex; align-items: center; margin-bottom: 12px; cursor: pointer; font-size: 16px; }
-        .ingredient-item input { margin-right: 15px; width: 20px; height: 20px; accent-color: #8b5cf6; }
+        /* Ingrediënten vinklijst */
+        .ingredient-item { display: flex; align-items: center; margin-bottom: 12px; cursor: pointer; }
+        .ingredient-item input { margin-right: 15px; width: 22px; height: 22px; accent-color: #8b5cf6; cursor: pointer; }
         .ingredient-item.checked span { text-decoration: line-through; opacity: 0.5; }
 
-        .instructions-text { line-height: 1.9; font-size: 17px; white-space: pre-wrap; background: white; padding: 20px; border-radius: 15px; }
+        .instructions-text { line-height: 1.9; font-size: 17px; white-space: pre-wrap; margin-bottom: 40px; }
 
-        /* Rating Slider */
-        .rating-section { margin-top: 50px; text-align: center; padding: 40px; background: white; border-top: 1px solid #eee; }
-        .slider-wrapper { position: relative; width: 85%; max-width: 400px; margin: 60px auto 40px auto; }
-        input[type="range"] { -webkit-appearance: none; width: 100%; height: 10px; border-radius: 5px; background: #e5e7eb; outline: none; }
+        /* Slicer op het lijntje */
+        .rating-section { border-top: 1px solid #eee; padding-top: 40px; text-align: center; }
+        .slider-wrapper { position: relative; width: 80%; margin: 60px auto 30px auto; }
+        input[type="range"] { -webkit-appearance: none; width: 100%; height: 8px; background: #ddd; border-radius: 5px; outline: none; }
         input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 50px; height: 50px; cursor: grab; }
-        #emoji-display { position: absolute; top: -20px; font-size: 45px; transition: left 0.1s ease-out; transform: translateX(-50%); pointer-events: none; }
+        #emoji-display { position: absolute; top: -22px; font-size: 45px; transform: translateX(-50%); pointer-events: none; transition: left 0.1s; }
 
-        .btn { background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%); color: white; border: none; padding: 12px 25px; border-radius: 25px; font-weight: 600; cursor: pointer; }
-        .edit-btn { position: absolute; top: 20px; right: 20px; background: white; border: none; padding: 10px 20px; border-radius: 25px; font-weight: 600; cursor: pointer; z-index: 10; }
-        textarea, input[type="text"], input[type="number"] { width: 100%; padding: 12px; margin-top: 10px; border: 1px solid #ddd; border-radius: 10px; }
+        .btn-save { background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%); color: white; border: none; padding: 15px 30px; border-radius: 25px; font-weight: 600; cursor: pointer; }
+        .edit-btn { position: absolute; top: 20px; right: 20px; background: white; border: none; padding: 10px 20px; border-radius: 25px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body>
@@ -64,18 +74,18 @@
     <div id="viewMode">
         <div id="recipeImage"></div>
         <div class="content">
-            <a href="index.html" class="back-link">← Terug</a>
+            <a href="index.html" style="text-decoration:none; color:#8b5cf6; font-weight:bold;">← Terug</a>
             <h1 id="title">Laden...</h1>
-            <div class="meta-info">
-                <span id="chefTag" class="tag"></span>
-                <span id="typeTag" class="tag"></span>
-            </div>
+            <div id="chefTag" class="tag"></div>
 
-            <div class="servings-control">
-                <span>Aantal personen:</span>
-                <button class="servings-btn" onclick="updateServings(-1)">-</button>
-                <b id="servingsDisplay">4</b>
-                <button class="servings-btn" onclick="updateServings(1)">+</button>
+            <div class="calculator-box">
+                <span>Bereken hoeveelheden voor:</span>
+                <div class="calc-controls">
+                    <button class="calc-btn" onclick="changeServings(-1)">-</button>
+                    <span id="servingsDisplay">4</span>
+                    <button class="calc-btn" onclick="changeServings(1)">+</button>
+                </div>
+                <span>personen</span>
             </div>
             
             <h3>Ingrediënten</h3>
@@ -85,30 +95,24 @@
             <div id="instructions" class="instructions-text"></div>
 
             <div class="rating-section">
-                <h4 style="font-family: 'Playfair Display'; font-size: 24px;">Smaakoordeel</h4>
+                <h4 style="font-family: 'Playfair Display';">Hoe smaakt het?</h4>
                 <div class="slider-wrapper">
                     <div id="emoji-display">😐</div>
                     <input type="range" id="scoreSlider" min="0" max="5" step="0.1" value="2.5">
                 </div>
-                <button class="btn" onclick="submitRating()">Verstuur 🚀</button>
-                <p id="avgDisplay" style="margin-top:20px; font-size:14px; color:#9ca3af;"></p>
+                <button class="btn-save" onclick="submitRating()">Verstuur Oordeel 🚀</button>
             </div>
         </div>
     </div>
 
     <div id="editMode" class="content" style="display:none;">
-        <h2>Recept aanpassen</h2>
-        <input type="text" id="editTitle" placeholder="Titel">
-        <input type="text" id="editChef" placeholder="Chef">
-        <label>Standaard aantal personen:</label>
-        <input type="number" id="editServings" value="4">
-        <label>Ingrediënten (Scheid met een komma of nieuwe regel):</label>
+        <h2>Aanpassen</h2>
+        <input type="text" id="editTitle">
+        <label>Basis aantal personen:</label>
+        <input type="number" id="editBaseServings">
+        <label>Ingrediënten (splits met een komma):</label>
         <textarea id="editIngredients" rows="6"></textarea>
-        <label>Bereiding:</label>
-        <textarea id="editInstructions" rows="10"></textarea>
-        <input type="url" id="editPhoto" placeholder="Foto URL">
-        <button class="btn" style="width:100%; margin-top:20px;" onclick="saveChanges()">Opslaan ✅</button>
-        <button style="background:none; border:none; color:#9ca3af; cursor:pointer; width:100%; margin-top:15px;" onclick="toggleEdit()">Annuleren</button>
+        <button class="btn-save" style="width:100%" onclick="saveChanges()">Opslaan</button>
     </div>
 </div>
 
@@ -129,103 +133,76 @@
     const db = getFirestore(app);
     const id = new URLSearchParams(window.location.search).get('id');
 
-    let originalServings = 4;
+    let baseServings = 4;
     let currentServings = 4;
-    let baseIngredients = [];
+    let ingredientStrings = [];
 
     async function load() {
         const snap = await getDoc(doc(db, "recepten", id));
         if (snap.exists()) {
             const r = snap.data();
+            baseServings = parseInt(r.personen) || 4;
+            currentServings = baseServings;
+            
             document.getElementById('title').innerText = r.titel;
-            document.getElementById('chefTag').innerText = `👨‍🍳 ${r.chef}`;
-            document.getElementById('typeTag').innerText = `🍴 ${r.type}`;
+            document.getElementById('chefTag').innerText = `👨‍🍳 Chef ${r.chef}`;
             document.getElementById('instructions').innerText = r.bereiding;
             document.getElementById('recipeImage').innerHTML = r.foto ? `<img src="${r.foto}" class="recipe-img">` : ``;
-
-            originalServings = parseInt(r.personen || 4);
-            currentServings = originalServings;
             document.getElementById('servingsDisplay').innerText = currentServings;
 
-            // Slimme splitsing op komma OF nieuwe regel
-            baseIngredients = r.ingredienten.split(/[,\n]+/).filter(i => i.trim() !== "");
+            // Splits op komma of nieuwe regel
+            ingredientStrings = r.ingredienten.split(/[,\n]+/).map(s => s.trim()).filter(s => s !== "");
             renderIngredients();
 
-            const avg = r.gemiddeldeScore || 0;
-            document.getElementById('avgDisplay').innerText = `Gemiddelde: ${avg}`;
-
-            // Vul edit velden
+            // Edit velden vullen
             document.getElementById('editTitle').value = r.titel;
-            document.getElementById('editChef').value = r.chef;
-            document.getElementById('editServings').value = originalServings;
+            document.getElementById('editBaseServings').value = baseServings;
             document.getElementById('editIngredients').value = r.ingredienten;
-            document.getElementById('editInstructions').value = r.bereiding;
-            document.getElementById('editPhoto').value = r.foto || "";
         }
     }
 
     function renderIngredients() {
         const container = document.getElementById('ingredientsList');
         container.innerHTML = "";
-        
-        const factor = currentServings / originalServings;
+        const factor = currentServings / baseServings;
 
-        baseIngredients.forEach(item => {
-            // Zoek getallen in de tekst en reken ze om
-            const calculatedItem = item.replace(/(\d+(?:[\.,]\d+)?)/g, (match) => {
+        ingredientStrings.forEach(text => {
+            // Zoek getallen (ook met komma/punt) en vermenigvuldig ze
+            const newText = text.replace(/(\d+[\.,]?\d*)/g, (match) => {
                 const num = parseFloat(match.replace(',', '.'));
-                const newNum = num * factor;
-                return Number.isInteger(newNum) ? newNum : newNum.toFixed(1).replace('.', ',');
+                const calculated = (num * factor).toFixed(1).replace('.0', '');
+                return calculated.replace('.', ',');
             });
 
             const div = document.createElement('div');
             div.className = 'ingredient-item';
-            div.innerHTML = `<input type="checkbox"> <span>${calculatedItem}</span>`;
-            div.onclick = function(e) { 
-                if(e.target.tagName !== 'INPUT') this.querySelector('input').checked = !this.querySelector('input').checked;
-                this.classList.toggle('checked'); 
+            div.innerHTML = `<input type="checkbox"> <span>${newText}</span>`;
+            div.onclick = function(e) {
+                if(e.target.type !== 'checkbox') {
+                    const cb = this.querySelector('input');
+                    cb.checked = !cb.checked;
+                }
+                this.classList.toggle('checked');
             };
             container.appendChild(div);
         });
     }
 
-    window.updateServings = (val) => {
-        if(currentServings + val < 1) return;
+    window.changeServings = (val) => {
+        if (currentServings + val < 1) return;
         currentServings += val;
         document.getElementById('servingsDisplay').innerText = currentServings;
         renderIngredients();
     };
 
-    window.toggleEdit = () => {
-        const v = document.getElementById('viewMode'), e = document.getElementById('editMode');
-        v.style.display = v.style.display === "none" ? "block" : "none";
-        e.style.display = e.style.display === "none" ? "block" : "none";
-    };
-
-    window.saveChanges = async () => {
-        await updateDoc(doc(db, "recepten", id), {
-            titel: document.getElementById('editTitle').value,
-            chef: document.getElementById('editChef').value,
-            personen: document.getElementById('editServings').value,
-            ingredienten: document.getElementById('editIngredients').value,
-            bereiding: document.getElementById('editInstructions').value,
-            foto: document.getElementById('editPhoto').value
-        });
-        location.reload();
-    };
-
-    // Slider emoji logica
+    // Slider emoji logica (als eerder)
     const slider = document.getElementById('scoreSlider');
     const emoji = document.getElementById('emoji-display');
     slider.addEventListener('input', () => {
         const v = slider.value;
         emoji.style.left = (v/5*100) + "%";
-        if(v < 1) emoji.innerText = "💩";
-        else if(v < 2) emoji.innerText = "🤢";
-        else if(v < 3) emoji.innerText = "😐";
-        else if(v < 4) emoji.innerText = "🙂";
-        else if(v < 5) emoji.innerText = "😋";
-        else emoji.innerText = "🏆";
+        const emojis = ["💩", "🤢", "😐", "🙂", "😋", "🏆"];
+        emoji.innerText = emojis[Math.floor(v)] || "🏆";
     });
 
     load();
