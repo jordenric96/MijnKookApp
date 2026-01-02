@@ -3,183 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kookboek van Loemek</title>
+    <title>Ons Familie Kookboek</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        /* Globale Styling */
         body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            margin: 0; 
-            padding: 0; 
-            color: #1f2937; 
-            background: linear-gradient(135deg, #fce7f3 0%, #f5f3ff 100%); /* Zachte funky gradient */
-            background-attachment: fixed; 
-            background-repeat: no-repeat;
-            min-height: 100vh;
+            font-family: 'Poppins', sans-serif; 
+            background: linear-gradient(135deg, #fce7f3 0%, #f5f3ff 100%) no-repeat fixed;
+            margin: 0; padding: 20px; color: #374151;
         }
 
-        /* Algemene container voor transparantie */
-        .app-container {
-            max-width: 900px; 
-            margin: 40px auto; 
-            background: rgba(255, 255, 255, 0.85); /* Licht transparant wit */
-            backdrop-filter: blur(10px); /* Glassmorphism effect */
-            border-radius: 25px; 
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
-        }
+        header { text-align: center; padding: 40px 0; }
+        h1 { font-family: 'Playfair Display', serif; font-size: 48px; color: #1f2937; margin: 0; }
+        p { color: #8b5cf6; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; }
 
-        header {
-            background: transparent; /* Geen eigen achtergrond, gebruikt body gradient */
-            color: #8b5cf6; 
-            padding: 0 0 30px 0; /* Padding aangepast */
-            text-align: center;
-        }
-        
-        h1 { 
-            margin: 0; 
-            font-size: 38px;
-            /* Gradient tekst */
-            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent;
-            display: inline-block; /* Zodat de gradient op de tekst werkt */
-        }
-
-        .search-container {
-            padding-bottom: 20px;
-        }
-
-        #searchInput {
-            width: 100%;
-            padding: 12px 20px;
-            border-radius: 25px;
-            border: 1px solid #ddd;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            font-size: 16px;
-            outline: none;
-            transition: 0.3s;
-            background: white; /* Zorg dat de input zelf wit is */
-        }
-
-        #searchInput:focus {
-            border-color: #8b5cf6;
-            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
-        }
-
-        .filter-container { display: flex; justify-content: center; gap: 10px; padding: 10px 0 20px 0; flex-wrap: wrap; }
-        .filter-btn { 
-            padding: 8px 18px; 
-            border-radius: 20px; 
-            border: none; 
-            background: rgba(255,255,255,0.7); /* Licht transparant */
-            color: #8b5cf6; 
-            cursor: pointer; 
-            font-weight: bold; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
-            transition: 0.3s; 
-            font-size: 14px;
-        }
-        .filter-btn.active { 
-            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%); 
-            color: white; 
-            box-shadow: 0 4px 10px rgba(139, 92, 246, 0.3);
+        .search-bar { max-width: 600px; margin: 0 auto 40px; display: flex; gap: 10px; }
+        input[type="text"] { 
+            flex: 1; padding: 15px 25px; border-radius: 30px; border: none; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); outline: none;
         }
 
         .recipe-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
-            gap: 20px; 
-            padding: 0; /* Padding is al op app-container */
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            gap: 25px; max-width: 1200px; margin: 0 auto; 
         }
-        
-        .recipe-card { 
-            background: white; 
-            border-radius: 15px; /* Iets rondere hoeken */
-            overflow: hidden; 
-            box-shadow: 0 8px 15px rgba(0,0,0,0.05); 
-            transition: 0.3s; 
-            cursor: pointer; 
-            position: relative; 
-            display: flex; /* Flexbox voor nette layout */
-            flex-direction: column;
-        }
-        .recipe-card:hover { transform: translateY(-5px); box-shadow: 0 12px 20px rgba(0,0,0,0.1); }
-        .recipe-image { width: 100%; height: 180px; object-fit: cover; background: #f3f4f6; }
-        .type-badge { position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.9); padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold; color: #ec4899; }
-        
-        .recipe-content { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
-        .recipe-content h3 { margin: 0 0 5px 0; color: #374151; font-size: 19px; line-height: 1.3; }
-        .recipe-content p { color: #6b7280; font-size: 13px; margin: 0; }
 
-        /* Score Balk Styling voor index.html */
+        .recipe-card { 
+            background: white; border-radius: 25px; overflow: hidden; 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05); transition: 0.3s; 
+            text-decoration: none; color: inherit; position: relative;
+            display: flex; flex-direction: column;
+        }
+
+        .recipe-card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(139, 92, 246, 0.15); }
+
+        .card-img { width: 100%; height: 200px; object-fit: cover; }
+        
+        .card-content { padding: 20px; flex-grow: 1; }
+        .card-title { font-family: 'Playfair Display', serif; font-size: 22px; margin: 0; color: #1f2937; }
+        .card-chef { font-size: 13px; color: #ec4899; font-weight: 600; margin-top: 5px; }
+
+        /* Score Indicator Balkje */
         .score-bar-container {
-            width: 100%;
-            height: 8px;
-            background: #e0e0e0;
-            border-radius: 4px;
-            margin-top: 10px;
-            position: relative;
-            overflow: hidden;
+            height: 6px; width: 100%; background: #f3f4f6; position: relative;
         }
         .score-bar-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #f7d24a 0%, #fbbc05 100%); /* Gele/Oranje gradient */
-            border-radius: 4px;
-            transition: width 0.5s ease-out;
-            position: absolute;
-            left: 0;
-            top: 0;
+            height: 100%; transition: width 1s ease-in-out;
         }
-        .score-text-small {
-            font-size: 12px;
-            color: #888;
-            margin-top: 5px;
-            text-align: right;
+        .card-emoji {
+            position: absolute; right: 15px; top: -35px; font-size: 24px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
         }
 
         .add-btn { 
             position: fixed; bottom: 30px; right: 30px; 
-            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%); 
-            color: white; 
-            width: 55px; height: 55px; 
-            border-radius: 50%; 
-            display: flex; align-items: center; justify-content: center; 
-            font-size: 30px; 
-            text-decoration: none; 
-            box-shadow: 0 10px 20px rgba(139, 92, 246, 0.4); 
+            background: linear-gradient(135deg, #ec4899, #8b5cf6);
+            color: white; width: 70px; height: 70px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 30px; text-decoration: none; box-shadow: 0 10px 25px rgba(236, 72, 153, 0.4);
             z-index: 100;
-            transition: 0.3s;
         }
-        .add-btn:hover { transform: scale(1.1); }
     </style>
 </head>
 <body>
 
-<div class="app-container">
-    <header>
-        <h1>🍲 Kookboek van Loemek</h1>
-    </header>
+<header>
+    <p>Onze Smaakvolle</p>
+    <h1>Familie Recepten</h1>
+</header>
 
-    <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Zoek op gerecht, chef of ingrediënt (bijv. chocolade)...">
-    </div>
-
-    <div class="filter-container">
-        <button class="filter-btn active" onclick="filterType('all', this)">Alles</button>
-        <button class="filter-btn" onclick="filterType('Voorgerecht', this)">Voorgerechten</button>
-        <button class="filter-btn" onclick="filterType('Hoofdgerecht', this)">Hoofdgerechten</button>
-        <button class="filter-btn" onclick="filterType('Dessert', this)">Desserts</button>
-        <button class="filter-btn" onclick="filterType('Patisserie', this)">Patisserie</button>
-    </div>
-
-    <div class="recipe-grid" id="recipeGrid"></div>
-
-    <a href="toevoegen.html" class="add-btn">+</a>
+<div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Zoek op gerecht of chef..." onkeyup="filterRecipes()">
 </div>
+
+<div class="recipe-grid" id="recipeGrid">
+    </div>
+
+<a href="toevoegen.html" class="add-btn">+</a>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyBzsxSTQKhhh8yKb4AFew7zQz26BMNKfHw",
@@ -193,60 +96,51 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    onSnapshot(query(collection(db, "recepten"), orderBy("datum", "desc")), (snapshot) => {
+    function getScoreStyles(score) {
+        if (score === 0) return { width: '0%', color: '#ddd', emoji: '😶' };
+        if (score < 1) return { width: '10%', color: '#ef4444', emoji: '💩' };
+        if (score < 2) return { width: '30%', color: '#f97316', emoji: '🤢' };
+        if (score < 3) return { width: '50%', color: '#eab308', emoji: '😐' };
+        if (score < 4) return { width: '75%', color: '#84cc16', emoji: '🙂' };
+        if (score < 5) return { width: '95%', color: '#10b981', emoji: '😋' };
+        return { width: '100%', color: '#8b5cf6', emoji: '🏆' };
+    }
+
+    async function loadRecipes() {
+        const querySnapshot = await getDocs(collection(db, "recepten"));
         const grid = document.getElementById('recipeGrid');
         grid.innerHTML = "";
-        snapshot.forEach((doc) => {
+
+        querySnapshot.forEach((doc) => {
             const r = doc.data();
-            const img = r.foto || 'https://via.placeholder.com/400x300?text=Geen+Foto';
+            const scoreData = getScoreStyles(r.gemiddeldeScore || 0);
             
-            // Voor de zoekfunctie
-            const searchData = `${r.titel} ${r.chef} ${r.ingredienten} ${r.type}`.toLowerCase();
-
-            // Score berekening voor de balk
-            const scorePercentage = (r.gemiddeldeScore / 5 * 100) || 0;
-            const scoreDisplay = r.gemiddeldeScore ? `⭐ ${r.gemiddeldeScore}` : 'Nog geen score';
-
             grid.innerHTML += `
-                <div class="recipe-card" data-type="${r.type}" data-search="${searchData}" onclick="window.location.href='recept.html?id=${doc.id}'">
-                    <div class="type-badge">${r.type}</div>
-                    <img src="${img}" class="recipe-image">
-                    <div class="recipe-content">
-                        <div>
-                            <h3>${r.titel}</h3>
-                            <p>👨‍🍳 Chef: ${r.chef}</p>
-                        </div>
-                        <div>
-                            <div class="score-bar-container">
-                                <div class="score-bar-fill" style="width: ${scorePercentage}%;"></div>
-                            </div>
-                            <div class="score-text-small">${scoreDisplay}</div>
-                        </div>
+                <a href="recept.html?id=${doc.id}" class="recipe-card">
+                    <img src="${r.foto || 'https://via.placeholder.com/400x300?text=Geen+Foto'}" class="card-img">
+                    <div class="card-content">
+                        <div class="card-emoji">${scoreData.emoji}</div>
+                        <h2 class="card-title">${r.titel}</h2>
+                        <div class="card-chef">Door Chef ${r.chef}</div>
                     </div>
-                </div>
+                    <div class="score-bar-container">
+                        <div class="score-bar-fill" style="width: ${scoreData.width}; background-color: ${scoreData.color};"></div>
+                    </div>
+                </a>
             `;
         });
-    });
+    }
 
-    document.getElementById('searchInput').addEventListener('input', (e) => {
-        const term = e.target.value.toLowerCase();
-        const cards = document.querySelectorAll('.recipe-card');
-        
-        cards.forEach(card => {
-            const content = card.getAttribute('data-search');
-            card.style.display = content.includes(term) ? "flex" : "none"; // Gebruik flex voor correcte weergave
-        });
-    });
-
-    window.filterType = (type, btn) => {
-        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        document.getElementById('searchInput').value = ""; 
-        
-        document.querySelectorAll('.recipe-card').forEach(card => {
-            card.style.display = (type === 'all' || card.dataset.type === type) ? "flex" : "none";
-        });
+    window.filterRecipes = () => {
+        let input = document.getElementById('searchInput').value.toLowerCase();
+        let cards = document.getElementsByClassName('recipe-card');
+        for (let card of cards) {
+            let text = card.innerText.toLowerCase();
+            card.style.display = text.includes(input) ? "flex" : "none";
+        }
     };
+
+    loadRecipes();
 </script>
 </body>
 </html>
