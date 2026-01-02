@@ -3,56 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nieuw Recept</title>
+    <title>Voeg Recept Toe</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #f3f4f6; margin: 0; padding: 20px; }
         .header { background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%); padding: 30px; border-radius: 0 0 30px 30px; margin: -20px -20px 20px -20px; text-align: center; color: white; }
         .form-card { max-width: 600px; margin: 20px auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
         label { display: block; margin-top: 15px; font-weight: bold; color: #4b5563; }
         input, textarea, select { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-size: 16px; }
-        .btn-save { width: 100%; padding: 15px; background: #8b5cf6; color: white; border: none; border-radius: 10px; cursor: pointer; font-size: 18px; font-weight: bold; margin-top: 20px; transition: 0.3s; }
-        .btn-save:hover { background: #ec4899; }
+        .btn-save { width: 100%; padding: 15px; background: #8b5cf6; color: white; border: none; border-radius: 10px; cursor: pointer; font-size: 18px; font-weight: bold; margin-top: 20px; }
     </style>
 </head>
 <body>
 
-<div class="header"><h2>Nieuw Recept</h2></div>
+<div class="header"><h2>Deel je Recept</h2></div>
 
 <div class="form-card">
-    <a href="index.html" style="text-decoration:none; color:#8b5cf6;">← Terug</a>
+    <a href="index.html" style="text-decoration:none; color:#8b5cf6; font-weight:bold;">← Terug naar overzicht</a>
     <form id="recipeForm">
-        <label>Wat voor soort gerecht is het?</label>
-        <select id="type" required>
+        <label>Jouw Naam</label>
+        <input type="text" id="chef" placeholder="Bijv. Chef Bas" required>
+
+        <label>Type Gerecht</label>
+        <select id="type">
             <option value="Voorgerecht">Voorgerecht</option>
             <option value="Hoofdgerecht" selected>Hoofdgerecht</option>
             <option value="Dessert">Dessert</option>
             <option value="Patisserie">Patisserie</option>
-            <option value="Tussendoortje">Tussendoortje</option>
         </select>
 
-        <label>Naam gerecht</label>
-        <input type="text" id="title" placeholder="Bijv. Oma's Appeltaart" required>
-
-        <label>Aantal personen</label>
-        <input type="number" id="servings" value="4">
+        <label>Naam Gerecht</label>
+        <input type="text" id="title" placeholder="Naam van je lekkernij" required>
 
         <label>Ingrediënten</label>
-        <textarea id="ingredients" rows="4" placeholder="100g bloem, 2 eieren..." required></textarea>
+        <textarea id="ingredients" rows="4" placeholder="Wat hebben we nodig?" required></textarea>
 
         <label>Bereidingswijze</label>
-        <textarea id="instructions" rows="6" placeholder="Mix de eieren met de bloem..." required></textarea>
+        <textarea id="instructions" rows="6" placeholder="Hoe maken we het?" required></textarea>
 
-        <label>Foto Link (Optioneel)</label>
-        <input type="url" id="photoUrl" placeholder="https://link-naar-foto.jpg">
+        <label>Foto Link (URL - optioneel)</label>
+        <input type="url" id="photoUrl" placeholder="https://...">
 
-        <button type="submit" id="submitBtn" class="btn-save">Deel Recept</button>
+        <button type="submit" id="saveBtn" class="btn-save">Deel met iedereen!</button>
     </form>
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-    import { getFirestore, collection, addDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyBzsxSTQKhhh8yKb4AFew7zQz26BMNKfHw",
@@ -64,40 +61,27 @@
     };
 
     const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
     const db = getFirestore(app);
-
-    let userData = null;
-    onAuthStateChanged(auth, async (user) => {
-        if (user) {
-            const snap = await getDoc(doc(db, "users", user.uid));
-            userData = snap.data();
-        } else { window.location.href = "login.html"; }
-    });
 
     document.getElementById('recipeForm').onsubmit = async (e) => {
         e.preventDefault();
-        if(!userData) return alert("Momentje, account wordt geladen...");
-        
-        const btn = document.getElementById('submitBtn');
+        const btn = document.getElementById('saveBtn');
         btn.disabled = true;
         btn.innerText = "Bezig met opslaan...";
 
         try {
             await addDoc(collection(db, "recepten"), {
+                chef: document.getElementById('chef').value,
                 titel: document.getElementById('title').value,
                 type: document.getElementById('type').value,
-                personen: document.getElementById('servings').value,
                 ingredienten: document.getElementById('ingredients').value,
                 bereiding: document.getElementById('instructions').value,
                 foto: document.getElementById('photoUrl').value || "",
-                auteur: userData.username,
-                auteurAvatar: userData.avatar,
                 datum: new Date()
             });
             window.location.href = "index.html";
         } catch (err) {
-            alert("Fout: " + err.message);
+            alert("Oeps: " + err.message);
             btn.disabled = false;
         }
     };
