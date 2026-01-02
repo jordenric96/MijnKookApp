@@ -3,38 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ons Familie Kookboek</title>
+    <title>KookApp van Loemek</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
+        /* 1. DE GRADIENT ACHTERGROND OVER DE VOLLEDIGE PAGINA */
         body { 
             font-family: 'Poppins', sans-serif; 
             background: linear-gradient(135deg, #fce7f3 0%, #f5f3ff 100%) no-repeat fixed;
-            margin: 0; padding: 20px; color: #374151;
+            margin: 0; padding: 20px; color: #374151; min-height: 100vh;
         }
 
         header { text-align: center; padding: 40px 0; }
-        h1 { font-family: 'Playfair Display', serif; font-size: 48px; color: #1f2937; margin: 0; }
-        p { color: #8b5cf6; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; }
+        h1 { 
+            font-family: 'Playfair Display', serif; 
+            font-size: 42px; 
+            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent;
+            margin: 0; 
+        }
+        .sub-header { color: #8b5cf6; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; font-size: 12px; margin-bottom: 5px; }
 
-        .search-bar { max-width: 600px; margin: 0 auto 40px; display: flex; gap: 10px; }
+        .search-bar { max-width: 600px; margin: 0 auto 40px; }
         input[type="text"] { 
-            flex: 1; padding: 15px 25px; border-radius: 30px; border: none; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05); outline: none;
+            width: 100%; padding: 15px 25px; border-radius: 30px; border: none; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); outline: none; font-size: 16px;
+            box-sizing: border-box;
         }
 
+        /* 2. HET RECEPTEN OVERZICHT */
         .recipe-grid { 
             display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
             gap: 25px; max-width: 1200px; margin: 0 auto; 
         }
 
         .recipe-card { 
-            background: white; border-radius: 25px; overflow: hidden; 
+            background: rgba(255, 255, 255, 0.8); 
+            backdrop-filter: blur(10px);
+            border-radius: 25px; overflow: hidden; 
             box-shadow: 0 10px 20px rgba(0,0,0,0.05); transition: 0.3s; 
             text-decoration: none; color: inherit; position: relative;
             display: flex; flex-direction: column;
         }
 
-        .recipe-card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(139, 92, 246, 0.15); }
+        .recipe-card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(139, 92, 246, 0.2); }
 
         .card-img { width: 100%; height: 200px; object-fit: cover; }
         
@@ -42,37 +54,39 @@
         .card-title { font-family: 'Playfair Display', serif; font-size: 22px; margin: 0; color: #1f2937; }
         .card-chef { font-size: 13px; color: #ec4899; font-weight: 600; margin-top: 5px; }
 
-        /* Score Indicator Balkje */
+        /* 3. SCORE INDICATOR BALKJE */
         .score-bar-container {
-            height: 6px; width: 100%; background: #f3f4f6; position: relative;
+            height: 8px; width: 100%; background: #eee; position: relative;
         }
         .score-bar-fill {
             height: 100%; transition: width 1s ease-in-out;
         }
         .card-emoji {
-            position: absolute; right: 15px; top: -35px; font-size: 24px;
+            position: absolute; right: 15px; top: -35px; font-size: 28px;
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
         }
 
+        /* Toevoegknop */
         .add-btn { 
             position: fixed; bottom: 30px; right: 30px; 
             background: linear-gradient(135deg, #ec4899, #8b5cf6);
-            color: white; width: 70px; height: 70px; border-radius: 50%;
+            color: white; width: 65px; height: 65px; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
-            font-size: 30px; text-decoration: none; box-shadow: 0 10px 25px rgba(236, 72, 153, 0.4);
-            z-index: 100;
+            font-size: 35px; text-decoration: none; box-shadow: 0 10px 25px rgba(236, 72, 153, 0.4);
+            z-index: 100; transition: 0.3s;
         }
+        .add-btn:hover { transform: scale(1.1) rotate(90deg); }
     </style>
 </head>
 <body>
 
 <header>
-    <p>Onze Smaakvolle</p>
-    <h1>Familie Recepten</h1>
+    <div class="sub-header">Bon Appétit</div>
+    <h1>KookApp van Loemek</h1>
 </header>
 
 <div class="search-bar">
-    <input type="text" id="searchInput" placeholder="Zoek op gerecht of chef..." onkeyup="filterRecipes()">
+    <input type="text" id="searchInput" placeholder="Zoek op recept, ingrediënt of chef..." onkeyup="filterRecipes()">
 </div>
 
 <div class="recipe-grid" id="recipeGrid">
@@ -82,7 +96,7 @@
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getFirestore, collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyBzsxSTQKhhh8yKb4AFew7zQz26BMNKfHw",
@@ -96,9 +110,10 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
+    // Functie voor de score visueel te maken op de kaartjes
     function getScoreStyles(score) {
-        if (score === 0) return { width: '0%', color: '#ddd', emoji: '😶' };
-        if (score < 1) return { width: '10%', color: '#ef4444', emoji: '💩' };
+        if (!score || score === 0) return { width: '5%', color: '#ddd', emoji: '😶' };
+        if (score < 1) return { width: '15%', color: '#ef4444', emoji: '💩' };
         if (score < 2) return { width: '30%', color: '#f97316', emoji: '🤢' };
         if (score < 3) return { width: '50%', color: '#eab308', emoji: '😐' };
         if (score < 4) return { width: '75%', color: '#84cc16', emoji: '🙂' };
@@ -106,22 +121,26 @@
         return { width: '100%', color: '#8b5cf6', emoji: '🏆' };
     }
 
-    async function loadRecipes() {
-        const querySnapshot = await getDocs(collection(db, "recepten"));
+    // Luister live naar wijzigingen in de database
+    const q = query(collection(db, "recepten"), orderBy("datum", "desc"));
+    onSnapshot(q, (snapshot) => {
         const grid = document.getElementById('recipeGrid');
         grid.innerHTML = "";
-
-        querySnapshot.forEach((doc) => {
+        
+        snapshot.forEach((doc) => {
             const r = doc.data();
             const scoreData = getScoreStyles(r.gemiddeldeScore || 0);
             
+            // Verzamel zoekbare tekst (titel, chef, ingrediënten)
+            const searchText = `${r.titel} ${r.chef} ${r.ingredienten}`.toLowerCase();
+
             grid.innerHTML += `
-                <a href="recept.html?id=${doc.id}" class="recipe-card">
+                <a href="recept.html?id=${doc.id}" class="recipe-card" data-search="${searchText}">
                     <img src="${r.foto || 'https://via.placeholder.com/400x300?text=Geen+Foto'}" class="card-img">
                     <div class="card-content">
                         <div class="card-emoji">${scoreData.emoji}</div>
                         <h2 class="card-title">${r.titel}</h2>
-                        <div class="card-chef">Door Chef ${r.chef}</div>
+                        <div class="card-chef">👨‍🍳 Chef ${r.chef}</div>
                     </div>
                     <div class="score-bar-container">
                         <div class="score-bar-fill" style="width: ${scoreData.width}; background-color: ${scoreData.color};"></div>
@@ -129,18 +148,18 @@
                 </a>
             `;
         });
-    }
+    });
 
+    // Zoekfunctie
     window.filterRecipes = () => {
-        let input = document.getElementById('searchInput').value.toLowerCase();
-        let cards = document.getElementsByClassName('recipe-card');
+        const term = document.getElementById('searchInput').value.toLowerCase();
+        const cards = document.getElementsByClassName('recipe-card');
+        
         for (let card of cards) {
-            let text = card.innerText.toLowerCase();
-            card.style.display = text.includes(input) ? "flex" : "none";
+            const content = card.getAttribute('data-search');
+            card.style.display = content.includes(term) ? "flex" : "none";
         }
     };
-
-    loadRecipes();
 </script>
 </body>
 </html>
