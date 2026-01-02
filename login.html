@@ -3,64 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inloggen - Mijn Kook App</title>
+    <title>Login - Mijn Kook App</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f4; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
-        .card { background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
-        h2 { color: #ff5722; text-align: center; margin-bottom: 1rem; }
-        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
-        button { width: 100%; padding: 12px; background: #ff5722; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; margin-top: 10px; }
-        button:hover { background: #e64a19; }
-        
-        /* Avatar Sectie */
-        .avatar-section-title { margin: 15px 0 5px 0; font-weight: bold; font-size: 0.9em; color: #555; }
-        .avatar-grid { 
-            display: grid; 
-            grid-template-columns: repeat(5, 1fr); 
-            gap: 8px; 
-            margin-bottom: 15px; 
-            background: #fff3e0; 
-            padding: 12px; 
-            border-radius: 10px; 
-            max-height: 160px; 
-            overflow-y: auto; 
-            border: 1px solid #ffccbc;
-        }
-        .avatar-option { 
-            font-size: 28px; 
-            cursor: pointer; 
-            text-align: center;
-            border-radius: 50%; 
-            padding: 5px; 
-            transition: 0.2s;
-            border: 2px solid transparent;
-            user-select: none;
-        }
-        .avatar-option:hover { background: white; transform: scale(1.1); }
-        .selected { border-color: #ff5722 !important; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        
-        .toggle-text { text-align: center; font-size: 0.85em; color: #666; margin-top: 20px; cursor: pointer; text-decoration: underline; }
-        #registrationFields { display: block; }
+        body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); height: 100vh; display: flex; align-items: center; justify-content: center; margin: 0; }
+        .login-card { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
+        h2 { color: #ff5722; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #ff5722; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+        .avatar-select { font-size: 30px; margin: 10px 0; display: flex; justify-content: center; gap: 10px; cursor: pointer; }
+        .avatar-select span { border: 2px solid transparent; border-radius: 50%; padding: 5px; }
+        .avatar-select span.selected { border-color: #ff5722; background: #fff3e0; }
     </style>
 </head>
 <body>
 
-<div class="card">
-    <h2 id="formTitle">Account aanmaken</h2>
-    
-    <div id="registrationFields">
-        <p class="avatar-section-title">Kies je Chef Avatar:</p>
-        <div class="avatar-grid" id="avatarPicker">
-            </div>
-        <input type="text" id="username" placeholder="Gebruikersnaam">
+<div class="login-card">
+    <h2>👨‍🍳 Welkom bij de Kook App</h2>
+    <p>Kies een avatar en gebruikersnaam</p>
+    <div class="avatar-select" id="avatarList">
+        <span onclick="selectAvatar('👨‍🍳', this)" class="selected">👨‍🍳</span>
+        <span onclick="selectAvatar('👩‍🍳', this)">👩‍🍳</span>
+        <span onclick="selectAvatar('🍕', this)">🍕</span>
+        <span onclick="selectAvatar('🥑', this)">🥑</span>
     </div>
-
-    <input type="email" id="email" placeholder="E-mailadres">
-    <input type="password" id="password" placeholder="Wachtwoord">
-    
-    <button id="mainBtn">Registreren</button>
-    
-    <p class="toggle-text" id="toggleLink" onclick="toggleMode()">Al een account? Log hier in</p>
+    <input type="text" id="username" placeholder="Gebruikersnaam" required>
+    <input type="email" id="email" placeholder="E-mailadres" required>
+    <input type="password" id="password" placeholder="Wachtwoord" required>
+    <button id="loginBtn">Account Aanmaken / Inloggen</button>
 </div>
 
 <script type="module">
@@ -69,83 +38,46 @@
     import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
     const firebaseConfig = {
-        apiKey: "AIzaSyDYOSyYeOLfoyxiKFQPZJmiCjTDG2Slc4g",
-        authDomain: "mijnkookapp.firebaseapp.com",
-        projectId: "mijnkookapp",
-        storageBucket: "mijnkookapp.firebasestorage.app",
-        messagingSenderId: "212986854940",
-        appId: "1:212986854940:web:f13e0cc5489224791fe9d9",
-        measurementId: "G-E6V3410YVP"
+        apiKey: "AIzaSyBzsxSTQKhhh8yKb4AFew7zQz26BMNKfHw",
+        authDomain: "mijnkookapp2.firebaseapp.com",
+        projectId: "mijnkookapp2",
+        storageBucket: "mijnkookapp2.firebasestorage.app",
+        messagingSenderId: "77365526386",
+        appId: "1:77365526386:web:faa6d99632dae10b4d67eb"
     };
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // Uitgebreide lijst met avatars
-    const avatars = [
-        '👨‍🍳', '👩‍🍳', '🧑‍🍳', '🍳', '🍕', '🍔', '🌮', 'Sushi', '🍣', '🍰', 
-        '🍩', '🥦', '🍓', '🥑', '🌶️', '🍪', '🍎', '🍍', '🍄', '🥐', 
-        '🍗', '🐱‍🍳', '🐻', '🐼', '🦊', '🐷', '🐸', '🐹', '🦁', '🐯'
-    ];
-
     let selectedAvatar = '👨‍🍳';
-    let isLoginMode = false;
-
-    // Laad alle avatars in de grid
-    const picker = document.getElementById('avatarPicker');
-    avatars.forEach((emoji, index) => {
-        const span = document.createElement('span');
-        span.innerText = emoji;
-        span.className = 'avatar-option' + (emoji === selectedAvatar ? ' selected' : '');
-        span.onclick = () => {
-            selectedAvatar = emoji;
-            document.querySelectorAll('.avatar-option').forEach(opt => opt.classList.remove('selected'));
-            span.classList.add('selected');
-        };
-        picker.appendChild(span);
-    });
-
-    // Wissel-functie
-    window.toggleMode = () => {
-        isLoginMode = !isLoginMode;
-        document.getElementById('formTitle').innerText = isLoginMode ? "Inloggen" : "Account aanmaken";
-        document.getElementById('registrationFields').style.display = isLoginMode ? "none" : "block";
-        document.getElementById('mainBtn').innerText = isLoginMode ? "Inloggen" : "Registreren";
-        document.getElementById('toggleLink').innerText = isLoginMode ? "Nog geen account? Maak er een aan" : "Al een account? Log hier in";
+    window.selectAvatar = (emoji, el) => {
+        selectedAvatar = emoji;
+        document.querySelectorAll('.avatar-select span').forEach(s => s.classList.remove('selected'));
+        el.classList.add('selected');
     };
 
-    // Knop actie
-    document.getElementById('mainBtn').onclick = async () => {
+    document.getElementById('loginBtn').onclick = async () => {
         const email = document.getElementById('email').value;
-        const pass = document.getElementById('password').value;
-        const name = document.getElementById('username').value;
-
-        if(!email || !pass) { alert("Vul e-mail en wachtwoord in"); return; }
+        const password = document.getElementById('password').value;
+        const username = document.getElementById('username').value;
 
         try {
-            if (isLoginMode) {
-                await signInWithEmailAndPassword(auth, email, pass);
+            const userCred = await createUserWithEmailAndPassword(auth, email, password);
+            await setDoc(doc(db, "users", userCred.user.uid), {
+                username: username,
+                avatar: selectedAvatar
+            });
+            window.location.href = "index.html";
+        } catch (error) {
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
                 window.location.href = "index.html";
-            } else {
-                if(!name) { alert("Kies een gebruikersnaam"); return; }
-                const userCred = await createUserWithEmailAndPassword(auth, email, pass);
-                
-                // Opslaan in database
-                await setDoc(doc(db, "users", userCred.user.uid), {
-                    username: name,
-                    avatar: selectedAvatar,
-                    rol: "user"
-                });
-                
-                alert("Welkom, Chef " + name + "!");
-                window.location.href = "index.html";
+            } catch (err) {
+                alert("Fout: " + err.message);
             }
-        } catch (e) {
-            alert("Fout: " + e.message);
         }
     };
 </script>
-
 </body>
 </html>
