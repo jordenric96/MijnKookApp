@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recept Details</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f9fafb; margin: 0; padding: 0; color: #1f2937; }
+        .header { background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%); height: 200px; display: flex; align-items: flex-end; padding: 20px; color: white; position: relative; }
+        .back-btn { position: absolute; top: 20px; left: 20px; background: rgba(255,255,255,0.2); color: white; padding: 8px 15px; border-radius: 20px; text-decoration: none; font-weight: bold; backdrop-filter: blur(5px); }
+        .container { max-width: 800px; margin: -50px auto 50px; background: white; border-radius: 30px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.1); position: relative; z-index: 10; }
+        .recipe-img { width: 100%; height: 400px; object-fit: cover; background: #eee; }
+        .content { padding: 40px; }
+        .type-tag { display: inline-block; background: #fdf2f8; color: #ec4899; padding: 5px 15px; border-radius: 15px; font-weight: bold; font-size: 14px; margin-bottom: 10px; }
+        h1 { margin: 10px 0; font-size: 32px; color: #111827; }
+        .meta-info { display: flex; gap: 20px; color: #6b7280; margin-bottom: 30px; border-bottom: 1px solid #f3f4f6; padding-bottom: 20px; }
+        h3 { color: #8b5cf6; border-left: 4px solid #ec4899; padding-left: 15px; margin-top: 30px; }
+        .text-box { line-height: 1.6; white-space: pre-wrap; color: #374151; background: #f9fafb; padding: 20px; border-radius: 15px; }
+        
+        /* Sterren Styling */
+        .rating-card { background: #f3f4f6; padding: 30px; border-radius: 20px; text-align: center; margin-top: 40px; }
+        .stars { font-size: 40px; cursor: pointer; color: #d1d5db; transition: 0.2s; }
+        .stars span:hover, .stars span.active { color: #fbbf24; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <a href="index.html" class="back-btn">← Terug</a>
+</div>
+
+<div class="container" id="recipeContainer">
+    <p style="padding: 50px; text-align: center;">Lekkers aan het ophalen...</p>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, doc, getDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBzsxSTQKhhh8yKb4AFew7zQz26BMNKfHw",
+        authDomain: "mijnkookapp2.firebaseapp.com",
+        projectId: "mijnkookapp2",
+        storageBucket: "mijnkookapp2.firebasestorage.app",
+        messagingSenderId: "77365526386",
+        appId: "1:77365526386:web:faa6d99632dae10b4d67eb"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const recipeId = urlParams.get('id');
+
+    async function loadRecipe() {
+        if (!recipeId) return;
+        const docSnap = await getDoc(doc(db, "recepten", recipeId));
+        
+        if (docSnap.exists()) {
+            const r = docSnap.data();
+            const fotoHtml = r.foto ? `<img src="${r.foto}" class="recipe-img">` : `<div class="recipe-img" style="display:flex; align-items:center; justify-content:center; background:#f3e8ff; color:#8b5cf6; font-size:50px;">🍲</div>`;
+            
+            document.getElementById('recipeContainer').innerHTML = `
+                ${fotoHtml}
+                <div class="content">
+                    <span class="type-tag">${r.type || 'Gerecht'}</span>
+                    <h1>${r.titel}</h1>
+                    <div class="meta-info">
+                        <span>👤 ${r.auteurAvatar || '👨‍🍳'} ${r.auteur}</span>
+                        <span>👥 ${r.personen} personen</span>
+                    </div>
+
+                    <h3>Wat heb je nodig?</h3>
+                    <div class="text-box">${r.ingredienten}</div>
+
+                    <h3>Aan de slag!</h3>
+                    <div class="text-box">${r.bereiding}</div>
+
+                    <div class="rating-card">
+                        <h4>Hoeveel sterren geef je dit gerecht?</h4>
+                        <div class="stars" id="starRating">
+                            <span onclick="rate(1)">☆</span><span onclick="rate(2)">☆</span><span onclick="rate(3)">☆</span><span onclick="rate(4)">☆</span><span onclick="rate(5)">☆</span>
+                        </div>
+                        <p id="rateStatus" style="margin-top:10px; color:#6b7280;">Klik op de sterren om te stemmen</p>
+                    </div>
+                </div>
+            `;
+        } else {
+            document.getElementById('recipeContainer').innerHTML = "<p>Oeps! Recept niet gevonden.</p>";
+        }
+    }
+
+    // Sterren Functie
+    window.rate = (score) => {
+        const stars = document.getElementById('starRating').children;
+        for (let i = 0; i < 5; i++) {
+            stars[i].innerHTML = i < score ? "★" : "☆";
+            stars[i].classList.toggle('active', i < score);
+        }
+        document.getElementById('rateStatus').innerText = "Je gaf " + score + " sterren! (Wordt nog niet opgeslagen)";
+    };
+
+    loadRecipe();
+</script>
+
+</body>
+</html>
