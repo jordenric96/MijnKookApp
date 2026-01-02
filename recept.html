@@ -8,7 +8,7 @@
         /* Zachte gradient over de hele pagina */
         body { 
             font-family: 'Segoe UI', sans-serif; 
-            background: linear-gradient(135deg, #fce7f3 0%, #f5f3ff 100%); 
+            background: linear-gradient(135deg, #fdf2f8 0%, #f5f3ff 100%); 
             background-attachment: fixed;
             margin: 0; 
             padding: 20px; 
@@ -19,7 +19,7 @@
         .container { 
             max-width: 800px; 
             margin: 20px auto; 
-            background: rgba(255, 255, 255, 0.9); 
+            background: rgba(255, 255, 255, 0.95); 
             backdrop-filter: blur(10px);
             border-radius: 30px; 
             box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
@@ -27,37 +27,34 @@
             position: relative; 
         }
 
-        .recipe-img { width: 100%; height: 400px; object-fit: cover; background: #eee; }
-        .no-img-placeholder { height: 150px; background: #f3e8ff; display: flex; align-items: center; justify-content: center; font-size: 50px; }
+        /* Foto sectie */
+        .recipe-img { width: 100%; height: 400px; object-fit: cover; background: #eee; border-bottom: 1px solid #f3f4f6; }
+        .no-img-placeholder { height: 100px; background: linear-gradient(135deg, #fce7f3 0%, #f5f3ff 100%); }
 
         .content { padding: 40px; }
         
-        .back-link { color: #8b5cf6; font-weight: bold; text-decoration: none; display: inline-block; margin-bottom: 20px; }
+        .back-link { color: #8b5cf6; font-weight: bold; text-decoration: none; display: inline-block; margin-bottom: 20px; transition: 0.2s; }
+        .back-link:hover { color: #ec4899; }
         
         h1 { margin: 10px 0; font-size: 32px; color: #4b5563; }
         h3 { color: #8b5cf6; border-left: 4px solid #f472b6; padding-left: 15px; margin-top: 25px; }
 
         .text-box { 
-            background: rgba(255,255,255,0.5); 
+            background: #fff; 
             padding: 20px; 
             border-radius: 15px; 
             white-space: pre-wrap; 
             line-height: 1.6; 
-            border: 1px solid rgba(139, 92, 246, 0.1);
+            border: 1px solid #f3f4f6;
         }
 
-        /* Bewerk Styling */
+        /* Bewerk sectie */
         .edit-btn { position: absolute; top: 20px; right: 20px; background: white; color: #8b5cf6; border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1); z-index: 20; }
         input, textarea, select { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-size: 16px; font-family: inherit; }
         label { display: block; margin-top: 15px; font-weight: bold; color: #6b7280; }
 
         .save-btn { background: #10b981; color: white; margin-top: 20px; width: 100%; padding: 15px; border-radius: 15px; border: none; font-weight: bold; cursor: pointer; font-size: 16px; }
-        .delete-btn { background: #ef4444; color: white; margin-top: 10px; width: 100%; padding: 15px; border-radius: 15px; border: none; font-weight: bold; cursor: pointer; font-size: 16px; opacity: 0.8; }
-        
-        /* Sterren Rating */
-        .rating-section { margin-top: 40px; text-align: center; background: rgba(255,255,255,0.4); padding: 20px; border-radius: 20px; }
-        .stars { font-size: 35px; cursor: pointer; color: #d1d5db; }
-        .stars span.active { color: #fbbf24; }
+        .delete-btn { background: none; color: #ef4444; margin-top: 15px; width: 100%; padding: 10px; border: 1px solid #ef4444; border-radius: 15px; font-weight: bold; cursor: pointer; font-size: 14px; }
     </style>
 </head>
 <body>
@@ -68,23 +65,15 @@
     <div id="viewMode">
         <div id="recipeImage"></div>
         <div class="content">
-            <a href="index.html" class="back-link">← Terug naar alle recepten</a>
+            <a href="index.html" class="back-link">← Terug naar overzicht</a>
             <h1 id="title">Laden...</h1>
-            <p id="meta" style="color:#9ca3af; font-weight:bold;"></p>
+            <p id="meta" style="color:#9ca3af; font-weight:bold; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;"></p>
             
             <h3>Ingrediënten</h3>
             <div id="ingredients" class="text-box"></div>
 
             <h3>Bereidingswijze</h3>
             <div id="instructions" class="text-box"></div>
-
-            <div class="rating-section">
-                <h4>Wat vind je van dit recept?</h4>
-                <div class="stars" id="starContainer">
-                    <span onclick="rate(1)">☆</span><span onclick="rate(2)">☆</span><span onclick="rate(3)">☆</span><span onclick="rate(4)">☆</span><span onclick="rate(5)">☆</span>
-                </div>
-                <p id="ratingStatus" style="font-size:14px; color:#9ca3af;">Geef je stem</p>
-            </div>
         </div>
     </div>
 
@@ -99,12 +88,12 @@
         <label>Bereidingswijze</label>
         <textarea id="editInstructions" rows="10"></textarea>
         
-        <label>Foto URL (Link naar je afbeelding)</label>
+        <label>Foto URL (bijv. van Postimages.org)</label>
         <input type="url" id="editPhoto" placeholder="https://...">
 
         <button class="save-btn" onclick="saveChanges()">Wijzigingen Opslaan ✅</button>
-        <button class="delete-btn" onclick="deleteRecipe()">Recept Verwijderen 🗑️</button>
-        <button style="background:none; border:none; color:#9ca3af; cursor:pointer; width:100%; margin-top:10px;" onclick="toggleEdit()">Annuleren</button>
+        <button class="delete-btn" onclick="deleteRecipe()">Recept definitief verwijderen 🗑️</button>
+        <button style="background:none; border:none; color:#9ca3af; cursor:pointer; width:100%; margin-top:15px;" onclick="toggleEdit()">Annuleren</button>
     </div>
 </div>
 
@@ -126,19 +115,16 @@
     const recipeId = new URLSearchParams(window.location.search).get('id');
 
     async function loadRecipe() {
-        const docRef = doc(db, "recepten", recipeId);
-        const snap = await getDoc(docRef);
-
+        const snap = await getDoc(doc(db, "recepten", recipeId));
         if (snap.exists()) {
             const r = snap.data();
-            // Weergave vullen
             document.getElementById('title').innerText = r.titel;
-            document.getElementById('meta').innerText = `${r.type.toUpperCase()} | DOOR ${r.chef.toUpperCase()}`;
+            document.getElementById('meta').innerText = `${r.type} | Chef: ${r.chef}`;
             document.getElementById('ingredients').innerText = r.ingredienten;
             document.getElementById('instructions').innerText = r.bereiding;
-            document.getElementById('recipeImage').innerHTML = r.foto ? `<img src="${r.foto}" class="recipe-img">` : `<div class="no-img-placeholder">🍲</div>`;
+            document.getElementById('recipeImage').innerHTML = r.foto ? `<img src="${r.foto}" class="recipe-img">` : `<div class="no-img-placeholder"></div>`;
 
-            // Bewerkvelden vullen
+            // Bewerkvelden
             document.getElementById('editTitle').value = r.titel;
             document.getElementById('editIngredients').value = r.ingredienten;
             document.getElementById('editInstructions').value = r.bereiding;
@@ -146,23 +132,17 @@
         }
     }
 
-    // Wisselen tussen kijken en bewerken
     window.toggleEdit = () => {
         const view = document.getElementById('viewMode');
         const edit = document.getElementById('editMode');
         const btn = document.getElementById('editToggle');
-        if (view.style.display === "none") {
-            view.style.display = "block";
-            edit.style.display = "none";
-            btn.style.display = "block";
-        } else {
-            view.style.display = "none";
-            edit.style.display = "block";
-            btn.style.display = "none";
-        }
+        const isEditing = view.style.display === "none";
+        
+        view.style.display = isEditing ? "block" : "none";
+        edit.style.display = isEditing ? "none" : "block";
+        btn.style.display = isEditing ? "block" : "none";
     };
 
-    // Opslaan
     window.saveChanges = async () => {
         try {
             await updateDoc(doc(db, "recepten", recipeId), {
@@ -172,25 +152,14 @@
                 foto: document.getElementById('editPhoto').value
             });
             location.reload();
-        } catch (e) { alert("Fout bij opslaan: " + e.message); }
+        } catch (e) { alert(e.message); }
     };
 
-    // Verwijderen
     window.deleteRecipe = async () => {
-        if (confirm("Weet je het zeker? Dit recept wordt voor altijd verwijderd!")) {
+        if (confirm("Weet je dit zeker? Het recept wordt voor altijd verwijderd.")) {
             await deleteDoc(doc(db, "recepten", recipeId));
             window.location.href = "index.html";
         }
-    };
-
-    // Sterren klik-effect (visueel)
-    window.rate = (score) => {
-        const stars = document.getElementById('starContainer').children;
-        for(let i=0; i<5; i++) {
-            stars[i].innerHTML = i < score ? "★" : "☆";
-            stars[i].classList.toggle('active', i < score);
-        }
-        document.getElementById('ratingStatus').innerText = `Je gaf dit recept ${score} sterren!`;
     };
 
     loadRecipe();
