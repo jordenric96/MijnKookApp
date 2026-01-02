@@ -25,64 +25,35 @@
         .back-link { color: #8b5cf6; font-weight: 600; text-decoration: none; display: inline-block; margin-bottom: 25px; }
 
         h1 { font-family: 'Playfair Display', serif; font-size: 42px; color: #1f2937; margin: 0; }
-        .tag { background: #fdf2f8; color: #ec4899; padding: 5px 15px; border-radius: 20px; font-size: 13px; font-weight: 600; display: inline-block; margin-top: 10px; }
+        .meta-info { display: flex; align-items: center; gap: 15px; margin-top: 15px; flex-wrap: wrap; }
+        .tag { background: #fdf2f8; color: #ec4899; padding: 5px 15px; border-radius: 20px; font-size: 13px; font-weight: 600; }
 
-        h3 { font-family: 'Playfair Display', serif; font-size: 26px; color: #8b5cf6; margin-top: 40px; }
+        /* Personen Selector */
+        .servings-control {
+            display: flex; align-items: center; gap: 10px;
+            background: #f3f4f6; padding: 10px 20px; border-radius: 25px; margin-top: 20px; width: fit-content;
+        }
+        .servings-btn { background: white; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-weight: bold; color: #8b5cf6; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
 
-        /* Interactieve Ingrediëntenlijst */
-        .ingredient-item { display: flex; align-items: center; margin-bottom: 10px; cursor: pointer; transition: 0.2s; }
-        .ingredient-item input { margin-right: 15px; width: 20px; height: 20px; cursor: pointer; accent-color: #8b5cf6; }
-        .ingredient-item.checked { text-decoration: line-through; opacity: 0.5; }
+        h3 { font-family: 'Playfair Display', serif; font-size: 26px; color: #8b5cf6; margin-top: 40px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
 
-        .instructions-text { line-height: 1.9; font-size: 17px; white-space: pre-wrap; }
+        /* Ingrediëntenlijst */
+        .ingredient-item { display: flex; align-items: center; margin-bottom: 12px; cursor: pointer; font-size: 16px; }
+        .ingredient-item input { margin-right: 15px; width: 20px; height: 20px; accent-color: #8b5cf6; }
+        .ingredient-item.checked span { text-decoration: line-through; opacity: 0.5; }
 
-        /* De Verbeterde Slider */
+        .instructions-text { line-height: 1.9; font-size: 17px; white-space: pre-wrap; background: white; padding: 20px; border-radius: 15px; }
+
+        /* Rating Slider */
         .rating-section { margin-top: 50px; text-align: center; padding: 40px; background: white; border-top: 1px solid #eee; }
-        
-        .slider-wrapper { 
-            position: relative; 
-            width: 85%; 
-            max-width: 400px; 
-            margin: 60px auto 40px auto; 
-        }
+        .slider-wrapper { position: relative; width: 85%; max-width: 400px; margin: 60px auto 40px auto; }
+        input[type="range"] { -webkit-appearance: none; width: 100%; height: 10px; border-radius: 5px; background: #e5e7eb; outline: none; }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 50px; height: 50px; cursor: grab; }
+        #emoji-display { position: absolute; top: -20px; font-size: 45px; transition: left 0.1s ease-out; transform: translateX(-50%); pointer-events: none; }
 
-        /* De balk zelf */
-        input[type="range"] { 
-            -webkit-appearance: none; 
-            width: 100%; 
-            height: 10px; 
-            border-radius: 5px; 
-            background: #e5e7eb; 
-            outline: none; 
-        }
-
-        /* Onzichtbare knop zodat je de emoji kunt slepen */
-        input[type="range"]::-webkit-slider-thumb { 
-            -webkit-appearance: none; 
-            width: 50px; 
-            height: 50px; 
-            cursor: grab; 
-        }
-
-        /* De Emoji die PRECIES op de lijn staat */
-        #emoji-display { 
-            position: absolute; 
-            top: -20px; /* Precies goed geplaatst */
-            font-size: 45px; 
-            transition: left 0.1s ease-out; 
-            transform: translateX(-50%); 
-            pointer-events: none;
-            text-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-
-        .send-score-btn {
-            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
-            color: white; border: none; padding: 16px 35px; border-radius: 30px; 
-            font-weight: 600; cursor: pointer; box-shadow: 0 10px 20px rgba(139, 92, 246, 0.2);
-        }
-
-        .edit-btn { position: absolute; top: 20px; right: 20px; background: white; border: none; padding: 10px 20px; border-radius: 25px; font-weight: 600; cursor: pointer; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        textarea, input[type="text"], input[type="url"] { width: 100%; padding: 15px; margin-top: 10px; border: 1px solid #ddd; border-radius: 12px; }
+        .btn { background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%); color: white; border: none; padding: 12px 25px; border-radius: 25px; font-weight: 600; cursor: pointer; }
+        .edit-btn { position: absolute; top: 20px; right: 20px; background: white; border: none; padding: 10px 20px; border-radius: 25px; font-weight: 600; cursor: pointer; z-index: 10; }
+        textarea, input[type="text"], input[type="number"] { width: 100%; padding: 12px; margin-top: 10px; border: 1px solid #ddd; border-radius: 10px; }
     </style>
 </head>
 <body>
@@ -95,7 +66,17 @@
         <div class="content">
             <a href="index.html" class="back-link">← Terug</a>
             <h1 id="title">Laden...</h1>
-            <div id="chefTag" class="tag"></div>
+            <div class="meta-info">
+                <span id="chefTag" class="tag"></span>
+                <span id="typeTag" class="tag"></span>
+            </div>
+
+            <div class="servings-control">
+                <span>Aantal personen:</span>
+                <button class="servings-btn" onclick="updateServings(-1)">-</button>
+                <b id="servingsDisplay">4</b>
+                <button class="servings-btn" onclick="updateServings(1)">+</button>
+            </div>
             
             <h3>Ingrediënten</h3>
             <div id="ingredientsList"></div>
@@ -104,27 +85,29 @@
             <div id="instructions" class="instructions-text"></div>
 
             <div class="rating-section">
-                <h4 style="font-family: 'Playfair Display'; font-size: 24px;">Hoe smaakt het?</h4>
+                <h4 style="font-family: 'Playfair Display'; font-size: 24px;">Smaakoordeel</h4>
                 <div class="slider-wrapper">
                     <div id="emoji-display">😐</div>
                     <input type="range" id="scoreSlider" min="0" max="5" step="0.1" value="2.5">
                 </div>
-                <p id="currentVal" style="font-weight: 600; font-size: 20px;">Score: 2.5</p>
-                <button id="submitBtn" class="send-score-btn" onclick="submitRating()">Verstuur Oordeel 🚀</button>
-                <p id="alreadyVoted" style="display:none; color:#8b5cf6; font-weight:600;">Je hebt al gestemd! ✨</p>
+                <button class="btn" onclick="submitRating()">Verstuur 🚀</button>
                 <p id="avgDisplay" style="margin-top:20px; font-size:14px; color:#9ca3af;"></p>
             </div>
         </div>
     </div>
 
     <div id="editMode" class="content" style="display:none;">
-        <h2>Aanpassen</h2>
+        <h2>Recept aanpassen</h2>
         <input type="text" id="editTitle" placeholder="Titel">
         <input type="text" id="editChef" placeholder="Chef">
-        <textarea id="editIngredients" rows="6" placeholder="Ingrediënten (elke regel is een nieuw item)"></textarea>
-        <textarea id="editInstructions" rows="10" placeholder="Bereiding"></textarea>
+        <label>Standaard aantal personen:</label>
+        <input type="number" id="editServings" value="4">
+        <label>Ingrediënten (Scheid met een komma of nieuwe regel):</label>
+        <textarea id="editIngredients" rows="6"></textarea>
+        <label>Bereiding:</label>
+        <textarea id="editInstructions" rows="10"></textarea>
         <input type="url" id="editPhoto" placeholder="Foto URL">
-        <button class="send-score-btn" style="width:100%; margin-top:20px;" onclick="saveChanges()">Opslaan ✅</button>
+        <button class="btn" style="width:100%; margin-top:20px;" onclick="saveChanges()">Opslaan ✅</button>
         <button style="background:none; border:none; color:#9ca3af; cursor:pointer; width:100%; margin-top:15px;" onclick="toggleEdit()">Annuleren</button>
     </div>
 </div>
@@ -146,83 +129,75 @@
     const db = getFirestore(app);
     const id = new URLSearchParams(window.location.search).get('id');
 
-    const slider = document.getElementById('scoreSlider');
-    const emojiDisplay = document.getElementById('emoji-display');
-
-    function getEmoji(val) {
-        if (val < 1.0) return "💩";
-        if (val < 2.0) return "🤢";
-        if (val < 3.0) return "😐";
-        if (val < 4.0) return "🙂";
-        if (val < 5.0) return "😋";
-        return "🏆";
-    }
-
-    slider.addEventListener('input', () => {
-        const val = parseFloat(slider.value);
-        emojiDisplay.style.left = `${(val / 5) * 100}%`;
-        emojiDisplay.innerText = getEmoji(val);
-        document.getElementById('currentVal').innerText = `Score: ${val}`;
-    });
+    let originalServings = 4;
+    let currentServings = 4;
+    let baseIngredients = [];
 
     async function load() {
         const snap = await getDoc(doc(db, "recepten", id));
         if (snap.exists()) {
             const r = snap.data();
             document.getElementById('title').innerText = r.titel;
-            document.getElementById('chefTag').innerText = `👨‍🍳 Chef ${r.chef}`;
+            document.getElementById('chefTag').innerText = `👨‍🍳 ${r.chef}`;
+            document.getElementById('typeTag').innerText = `🍴 ${r.type}`;
             document.getElementById('instructions').innerText = r.bereiding;
             document.getElementById('recipeImage').innerHTML = r.foto ? `<img src="${r.foto}" class="recipe-img">` : ``;
 
-            // Ingrediënten omzetten naar vinklijst
-            const ingrContainer = document.getElementById('ingredientsList');
-            const lines = r.ingredienten.split('\n');
-            ingrContainer.innerHTML = "";
-            lines.forEach(line => {
-                if(line.trim() !== "") {
-                    const div = document.createElement('div');
-                    div.className = 'ingredient-item';
-                    div.innerHTML = `<input type="checkbox"> <span>${line}</span>`;
-                    div.onclick = function() { this.classList.toggle('checked'); };
-                    ingrContainer.appendChild(div);
-                }
-            });
+            originalServings = parseInt(r.personen || 4);
+            currentServings = originalServings;
+            document.getElementById('servingsDisplay').innerText = currentServings;
 
-            // Score UI
+            // Slimme splitsing op komma OF nieuwe regel
+            baseIngredients = r.ingredienten.split(/[,\n]+/).filter(i => i.trim() !== "");
+            renderIngredients();
+
             const avg = r.gemiddeldeScore || 0;
-            document.getElementById('avgDisplay').innerText = `Totaal gemiddelde: ${getEmoji(avg)} ${avg}`;
-            
-            if (localStorage.getItem('voted_' + id)) {
-                document.getElementById('submitBtn').style.display = 'none';
-                document.getElementById('alreadyVoted').style.display = 'block';
-                slider.disabled = true;
-            }
+            document.getElementById('avgDisplay').innerText = `Gemiddelde: ${avg}`;
 
+            // Vul edit velden
             document.getElementById('editTitle').value = r.titel;
             document.getElementById('editChef').value = r.chef;
+            document.getElementById('editServings').value = originalServings;
             document.getElementById('editIngredients').value = r.ingredienten;
             document.getElementById('editInstructions').value = r.bereiding;
             document.getElementById('editPhoto').value = r.foto || "";
         }
     }
 
-    window.submitRating = async () => {
-        const newScore = parseFloat(slider.value);
-        const docRef = doc(db, "recepten", id);
-        const snap = await getDoc(docRef);
-        const r = snap.data();
-        const totaal = (r.totaalScores || 0) + newScore;
-        const stemmen = (r.aantalStemmen || 0) + 1;
-        const gemiddelde = (totaal / stemmen).toFixed(1);
+    function renderIngredients() {
+        const container = document.getElementById('ingredientsList');
+        container.innerHTML = "";
+        
+        const factor = currentServings / originalServings;
 
-        await updateDoc(docRef, { totaalScores: totaal, aantalStemmen: stemmen, gemiddeldeScore: parseFloat(gemiddelde) });
-        localStorage.setItem('voted_' + id, 'true');
-        location.reload();
+        baseIngredients.forEach(item => {
+            // Zoek getallen in de tekst en reken ze om
+            const calculatedItem = item.replace(/(\d+(?:[\.,]\d+)?)/g, (match) => {
+                const num = parseFloat(match.replace(',', '.'));
+                const newNum = num * factor;
+                return Number.isInteger(newNum) ? newNum : newNum.toFixed(1).replace('.', ',');
+            });
+
+            const div = document.createElement('div');
+            div.className = 'ingredient-item';
+            div.innerHTML = `<input type="checkbox"> <span>${calculatedItem}</span>`;
+            div.onclick = function(e) { 
+                if(e.target.tagName !== 'INPUT') this.querySelector('input').checked = !this.querySelector('input').checked;
+                this.classList.toggle('checked'); 
+            };
+            container.appendChild(div);
+        });
+    }
+
+    window.updateServings = (val) => {
+        if(currentServings + val < 1) return;
+        currentServings += val;
+        document.getElementById('servingsDisplay').innerText = currentServings;
+        renderIngredients();
     };
 
     window.toggleEdit = () => {
-        const v = document.getElementById('viewMode');
-        const e = document.getElementById('editMode');
+        const v = document.getElementById('viewMode'), e = document.getElementById('editMode');
         v.style.display = v.style.display === "none" ? "block" : "none";
         e.style.display = e.style.display === "none" ? "block" : "none";
     };
@@ -231,12 +206,27 @@
         await updateDoc(doc(db, "recepten", id), {
             titel: document.getElementById('editTitle').value,
             chef: document.getElementById('editChef').value,
+            personen: document.getElementById('editServings').value,
             ingredienten: document.getElementById('editIngredients').value,
             bereiding: document.getElementById('editInstructions').value,
             foto: document.getElementById('editPhoto').value
         });
         location.reload();
     };
+
+    // Slider emoji logica
+    const slider = document.getElementById('scoreSlider');
+    const emoji = document.getElementById('emoji-display');
+    slider.addEventListener('input', () => {
+        const v = slider.value;
+        emoji.style.left = (v/5*100) + "%";
+        if(v < 1) emoji.innerText = "💩";
+        else if(v < 2) emoji.innerText = "🤢";
+        else if(v < 3) emoji.innerText = "😐";
+        else if(v < 4) emoji.innerText = "🙂";
+        else if(v < 5) emoji.innerText = "😋";
+        else emoji.innerText = "🏆";
+    });
 
     load();
 </script>
