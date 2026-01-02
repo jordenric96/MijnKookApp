@@ -6,6 +6,7 @@
     <title>Recept Detail</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
+        /* Basis Styling */
         body { 
             font-family: 'Poppins', sans-serif; 
             background: linear-gradient(135deg, #fce7f3 0%, #f5f3ff 100%) no-repeat fixed;
@@ -20,50 +21,57 @@
             overflow: hidden; position: relative; 
         }
 
+        /* Foto en Header */
         .recipe-img { width: 100%; height: 450px; object-fit: cover; border-bottom: 5px solid #fce7f3; }
         .content { padding: 40px; }
         
-        h1 { font-family: 'Playfair Display', serif; font-size: 42px; color: #1f2937; margin-bottom: 10px; }
-        .tag { background: #fdf2f8; color: #ec4899; padding: 5px 15px; border-radius: 20px; font-size: 13px; font-weight: 600; display: inline-block; }
+        h1 { font-family: 'Playfair Display', serif; font-size: 42px; color: #1f2937; margin: 0; }
+        .tag { background: #fdf2f8; color: #ec4899; padding: 5px 15px; border-radius: 20px; font-size: 13px; font-weight: 600; display: inline-block; margin-top: 10px; }
 
-        /* Personen Calculator Styling */
+        /* Actie Balk (Nieuw!) */
+        .action-bar {
+            display: flex; gap: 15px; margin: 25px 0; padding: 15px 0; border-bottom: 1px solid #eee;
+        }
+        .action-item {
+            display: flex; flex-direction: column; align-items: center; gap: 5px;
+            cursor: pointer; font-size: 12px; font-weight: 600; color: #8b5cf6; transition: 0.2s;
+        }
+        .action-item:hover { color: #ec4899; }
+        .action-icon {
+            width: 45px; height: 45px; background: white; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-size: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .active-mode { background: #8b5cf6 !important; color: white !important; }
+
+        /* Personen Calculator */
         .calculator-box {
-            background: #fff;
-            padding: 20px;
-            border-radius: 20px;
-            margin: 30px 0;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            background: #fff; padding: 20px; border-radius: 20px;
+            margin: 30px 0; display: flex; align-items: center; justify-content: space-between;
             border: 1px solid #f0f0f0;
         }
-        .calc-controls { display: flex; align-items: center; gap: 15px; }
-        .calc-btn { 
-            width: 40px; height: 40px; border-radius: 50%; border: none; 
-            background: #8b5cf6; color: white; font-size: 20px; cursor: pointer;
-            transition: 0.2s;
-        }
-        .calc-btn:hover { background: #ec4899; }
-        #servingsDisplay { font-size: 24px; font-weight: 600; min-width: 30px; text-align: center; }
-
-        h3 { font-family: 'Playfair Display', serif; font-size: 26px; color: #8b5cf6; margin-top: 40px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .calc-btn { width: 35px; height: 35px; border-radius: 50%; border: none; background: #8b5cf6; color: white; cursor: pointer; }
 
         /* Ingrediënten vinklijst */
         .ingredient-item { display: flex; align-items: center; margin-bottom: 12px; cursor: pointer; }
-        .ingredient-item input { margin-right: 15px; width: 22px; height: 22px; accent-color: #8b5cf6; cursor: pointer; }
+        .ingredient-item input { margin-right: 15px; width: 22px; height: 22px; accent-color: #8b5cf6; }
         .ingredient-item.checked span { text-decoration: line-through; opacity: 0.5; }
 
-        .instructions-text { line-height: 1.9; font-size: 17px; white-space: pre-wrap; margin-bottom: 40px; }
-
-        /* Slicer op het lijntje */
-        .rating-section { border-top: 1px solid #eee; padding-top: 40px; text-align: center; }
-        .slider-wrapper { position: relative; width: 80%; margin: 60px auto 30px auto; }
-        input[type="range"] { -webkit-appearance: none; width: 100%; height: 8px; background: #ddd; border-radius: 5px; outline: none; }
+        /* Rating Section */
+        .slider-wrapper { position: relative; width: 85%; margin: 60px auto 40px auto; }
+        input[type="range"] { -webkit-appearance: none; width: 100%; height: 10px; border-radius: 5px; background: #e5e7eb; outline: none; }
         input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 50px; height: 50px; cursor: grab; }
         #emoji-display { position: absolute; top: -22px; font-size: 45px; transform: translateX(-50%); pointer-events: none; transition: left 0.1s; }
 
-        .btn-save { background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%); color: white; border: none; padding: 15px 30px; border-radius: 25px; font-weight: 600; cursor: pointer; }
-        .edit-btn { position: absolute; top: 20px; right: 20px; background: white; border: none; padding: 10px 20px; border-radius: 25px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .edit-btn { position: absolute; top: 20px; right: 20px; background: white; border: none; padding: 10px 20px; border-radius: 25px; font-weight: 600; cursor: pointer; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        
+        /* Print Instellingen */
+        @media print {
+            body { background: white; padding: 0; }
+            .app-container { box-shadow: none; border: none; margin: 0; max-width: 100%; }
+            .action-bar, .rating-section, .edit-btn, .back-link { display: none !important; }
+            .recipe-img { height: 250px; }
+        }
     </style>
 </head>
 <body>
@@ -74,45 +82,59 @@
     <div id="viewMode">
         <div id="recipeImage"></div>
         <div class="content">
-            <a href="index.html" style="text-decoration:none; color:#8b5cf6; font-weight:bold;">← Terug</a>
+            <a href="index.html" style="text-decoration:none; color:#8b5cf6; font-weight:600;">← Terug</a>
             <h1 id="title">Laden...</h1>
             <div id="chefTag" class="tag"></div>
 
+            <div class="action-bar">
+                <div class="action-item" onclick="toggleWakeLock()" id="wakeLockBtn">
+                    <div class="action-icon" id="wakeLockIcon">💡</div>
+                    <span>Kookmodus</span>
+                </div>
+                <div class="action-item" onclick="window.print()">
+                    <div class="action-icon">🖨️</div>
+                    <span>Printen</span>
+                </div>
+                <div class="action-item" id="whatsappShare">
+                    <div class="action-icon">💬</div>
+                    <span>Delen</span>
+                </div>
+            </div>
+
             <div class="calculator-box">
-                <span>Bereken hoeveelheden voor:</span>
-                <div class="calc-controls">
+                <span>Hoeveelheden voor:</span>
+                <div style="display:flex; align-items:center; gap:15px;">
                     <button class="calc-btn" onclick="changeServings(-1)">-</button>
-                    <span id="servingsDisplay">4</span>
+                    <b id="servingsDisplay" style="font-size:20px;">4</b>
                     <button class="calc-btn" onclick="changeServings(1)">+</button>
                 </div>
                 <span>personen</span>
             </div>
             
-            <h3>Ingrediënten</h3>
+            <h3 style="font-family: 'Playfair Display'; color: #8b5cf6;">Ingrediënten</h3>
             <div id="ingredientsList"></div>
 
-            <h3>Bereidingswijze</h3>
-            <div id="instructions" class="instructions-text"></div>
+            <h3 style="font-family: 'Playfair Display'; color: #8b5cf6;">Bereiding</h3>
+            <div id="instructions" style="line-height:1.9; white-space:pre-wrap;"></div>
 
-            <div class="rating-section">
-                <h4 style="font-family: 'Playfair Display';">Hoe smaakt het?</h4>
+            <div class="rating-section" style="margin-top:50px; text-align:center; border-top:1px solid #eee; padding-top:40px;">
+                <h4 style="font-family: 'Playfair Display'; font-size:24px;">Hoe was de smaak?</h4>
                 <div class="slider-wrapper">
                     <div id="emoji-display">😐</div>
                     <input type="range" id="scoreSlider" min="0" max="5" step="0.1" value="2.5">
                 </div>
-                <button class="btn-save" onclick="submitRating()">Verstuur Oordeel 🚀</button>
+                <button onclick="submitRating()" style="background:linear-gradient(135deg, #ec4899, #8b5cf6); color:white; border:none; padding:15px 35px; border-radius:30px; font-weight:600; cursor:pointer;">Verstuur Score 🚀</button>
+                <p id="avgDisplay" style="margin-top:20px; font-size:14px; color:#9ca3af;"></p>
             </div>
         </div>
     </div>
 
     <div id="editMode" class="content" style="display:none;">
         <h2>Aanpassen</h2>
-        <input type="text" id="editTitle">
-        <label>Basis aantal personen:</label>
-        <input type="number" id="editBaseServings">
-        <label>Ingrediënten (splits met een komma):</label>
-        <textarea id="editIngredients" rows="6"></textarea>
-        <button class="btn-save" style="width:100%" onclick="saveChanges()">Opslaan</button>
+        <input type="text" id="editTitle" style="width:100%; padding:15px; border-radius:12px; border:1px solid #ddd; margin-bottom:15px;">
+        <textarea id="editIngredients" rows="6" style="width:100%; padding:15px; border-radius:12px; border:1px solid #ddd; margin-bottom:15px;"></textarea>
+        <button onclick="saveChanges()" style="width:100%; padding:15px; background:#10b981; color:white; border:none; border-radius:12px; font-weight:600; cursor:pointer;">Opslaan ✅</button>
+        <button onclick="toggleEdit()" style="width:100%; background:none; border:none; color:#9ca3af; margin-top:15px; cursor:pointer;">Annuleren</button>
     </div>
 </div>
 
@@ -133,10 +155,32 @@
     const db = getFirestore(app);
     const id = new URLSearchParams(window.location.search).get('id');
 
+    let wakeLock = null;
     let baseServings = 4;
     let currentServings = 4;
     let ingredientStrings = [];
 
+    // --- KOOKMODUS (Wake Lock) ---
+    window.toggleWakeLock = async () => {
+        if ('wakeLock' in navigator) {
+            try {
+                if (!wakeLock) {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                    document.getElementById('wakeLockIcon').classList.add('active-mode');
+                    document.getElementById('wakeLockBtn').style.color = '#ec4899';
+                    alert("Kookmodus aan: Scherm blijft aan! 🕯️");
+                } else {
+                    await wakeLock.release();
+                    wakeLock = null;
+                    document.getElementById('wakeLockIcon').classList.remove('active-mode');
+                    document.getElementById('wakeLockBtn').style.color = '#8b5cf6';
+                    alert("Kookmodus uit.");
+                }
+            } catch (err) { alert("Je browser ondersteunt Kookmodus niet."); }
+        }
+    };
+
+    // --- DATA LADEN & CALCULATOR ---
     async function load() {
         const snap = await getDoc(doc(db, "recepten", id));
         if (snap.exists()) {
@@ -149,15 +193,14 @@
             document.getElementById('instructions').innerText = r.bereiding;
             document.getElementById('recipeImage').innerHTML = r.foto ? `<img src="${r.foto}" class="recipe-img">` : ``;
             document.getElementById('servingsDisplay').innerText = currentServings;
+            
+            // WhatsApp Link
+            document.getElementById('whatsappShare').onclick = () => {
+                window.open(`https://wa.me/?text=Check dit recept voor ${r.titel}! 😋 ${window.location.href}`);
+            };
 
-            // Splits op komma of nieuwe regel
             ingredientStrings = r.ingredienten.split(/[,\n]+/).map(s => s.trim()).filter(s => s !== "");
             renderIngredients();
-
-            // Edit velden vullen
-            document.getElementById('editTitle').value = r.titel;
-            document.getElementById('editBaseServings').value = baseServings;
-            document.getElementById('editIngredients').value = r.ingredienten;
         }
     }
 
@@ -167,23 +210,14 @@
         const factor = currentServings / baseServings;
 
         ingredientStrings.forEach(text => {
-            // Zoek getallen (ook met komma/punt) en vermenigvuldig ze
             const newText = text.replace(/(\d+[\.,]?\d*)/g, (match) => {
                 const num = parseFloat(match.replace(',', '.'));
-                const calculated = (num * factor).toFixed(1).replace('.0', '');
-                return calculated.replace('.', ',');
+                return ((num * factor).toFixed(1).replace('.0', '')).replace('.', ',');
             });
-
             const div = document.createElement('div');
             div.className = 'ingredient-item';
             div.innerHTML = `<input type="checkbox"> <span>${newText}</span>`;
-            div.onclick = function(e) {
-                if(e.target.type !== 'checkbox') {
-                    const cb = this.querySelector('input');
-                    cb.checked = !cb.checked;
-                }
-                this.classList.toggle('checked');
-            };
+            div.onclick = function(e) { if(e.target.type !== 'checkbox') this.querySelector('input').checked = !this.querySelector('input').checked; this.classList.toggle('checked'); };
             container.appendChild(div);
         });
     }
@@ -195,7 +229,7 @@
         renderIngredients();
     };
 
-    // Slider emoji logica (als eerder)
+    // --- RATING LOGICA ---
     const slider = document.getElementById('scoreSlider');
     const emoji = document.getElementById('emoji-display');
     slider.addEventListener('input', () => {
