@@ -6,24 +6,54 @@
     <title>Recept Detail</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #f9fafb; margin: 0; padding: 0; }
-        .header { background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%); height: 150px; }
-        .container { max-width: 800px; margin: -60px auto 50px; background: white; border-radius: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); overflow: hidden; }
-        .recipe-img { width: 100%; height: 400px; object-fit: cover; background: #eee; }
+        .header { background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%); height: 120px; }
+        .container { max-width: 800px; margin: -60px auto 50px; background: white; border-radius: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); overflow: hidden; position: relative; }
+        .recipe-img { width: 100%; height: 350px; object-fit: cover; background: #eee; }
         .content { padding: 40px; }
-        h3 { color: #8b5cf6; border-left: 4px solid #ec4899; padding-left: 15px; }
-        .text-box { background: #f9fafb; padding: 20px; border-radius: 15px; white-space: pre-wrap; line-height: 1.6; }
+        h3 { color: #8b5cf6; border-left: 4px solid #ec4899; padding-left: 15px; margin-top: 25px; }
+        .text-box, textarea, input { background: #f9fafb; padding: 20px; border-radius: 15px; white-space: pre-wrap; line-height: 1.6; width: 100%; border: none; font-family: inherit; font-size: 16px; box-sizing: border-box; }
+        textarea { border: 1px solid #ddd; }
+        .edit-btn { position: absolute; top: 20px; right: 20px; background: white; color: #8b5cf6; border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .save-btn { background: #4caf50; color: white; margin-top: 20px; display: none; width: 100%; padding: 15px; border-radius: 15px; border: none; font-weight: bold; cursor: pointer; }
+        .back-link { color: #8b5cf6; font-weight: bold; text-decoration: none; display: inline-block; margin-bottom: 20px; }
     </style>
 </head>
 <body>
 
 <div class="header"></div>
-<div class="container" id="detail">
-    <p style="padding:40px; text-align:center;">Laden...</p>
+<div class="container" id="detailContainer">
+    <button class="edit-btn" id="editToggle" onclick="toggleEdit()">Bewerken ✏️</button>
+    <div id="displayArea">
+        <div id="imageArea"></div>
+        <div class="content">
+            <a href="index.html" class="back-link">← Terug</a>
+            <h1 id="viewTitle">Laden...</h1>
+            <p id="viewMeta"></p>
+            <h3>Ingrediënten</h3>
+            <div id="viewIngredients" class="text-box"></div>
+            <h3>Bereiding</h3>
+            <div id="viewInstructions" class="text-box"></div>
+        </div>
+    </div>
+
+    <div id="editArea" class="content" style="display:none;">
+        <a href="#" onclick="toggleEdit()" class="back-link">Annuleren</a>
+        <h2>Recept Aanpassen</h2>
+        <label>Naam Gerecht</label>
+        <input type="text" id="editTitle">
+        <label>Ingrediënten</label>
+        <textarea id="editIngredients" rows="8"></textarea>
+        <label>Bereiding</label>
+        <textarea id="editInstructions" rows="10"></textarea>
+        <label>Foto URL</label>
+        <input type="url" id="editPhoto">
+        <button class="save-btn" id="saveBtn" style="display:block;" onclick="saveChanges()">Wijzigingen Opslaan</button>
+    </div>
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyBzsxSTQKhhh8yKb4AFew7zQz26BMNKfHw",
@@ -36,28 +66,53 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-
     const id = new URLSearchParams(window.location.search).get('id');
 
     async function load() {
         const snap = await getDoc(doc(db, "recepten", id));
         if (snap.exists()) {
             const r = snap.data();
-            const imgHtml = r.foto ? `<img src="${r.foto}" class="recipe-img">` : `<div style="height:200px; background:#f3e8ff;"></div>`;
-            document.getElementById('detail').innerHTML = `
-                ${imgHtml}
-                <div class="content">
-                    <a href="index.html" style="color:#8b5cf6; font-weight:bold; text-decoration:none;">← Terug</a>
-                    <h1 style="margin-top:10px;">${r.titel}</h1>
-                    <p><b>Type:</b> ${r.type} | <b>Chef:</b> ${r.chef}</p>
-                    <h3>Ingrediënten</h3>
-                    <div class="text-box">${r.ingredienten}</div>
-                    <h3>Bereiding</h3>
-                    <div class="text-box">${r.bereiding}</div>
-                </div>
-            `;
+            // Weergave
+            document.getElementById('imageArea').innerHTML = r.foto ? `<img src="${r.foto}" class="recipe-img">` : `<div style="height:150px; background:#f3e8ff;"></div>`;
+            document.getElementById('viewTitle').innerText = r.titel;
+            document.getElementById('viewMeta').innerText = `Type: ${r.type} | Chef: ${r.chef}`;
+            document.getElementById('viewIngredients').innerText = r.ingredienten;
+            document.getElementById('viewInstructions').innerText = r.bereiding;
+
+            // Invulvelden voor bewerken
+            document.getElementById('editTitle').value = r.titel;
+            document.getElementById('editIngredients').value = r.ingredienten;
+            document.getElementById('editInstructions').value = r.bereiding;
+            document.getElementById('editPhoto').value = r.foto || "";
         }
     }
+
+    window.toggleEdit = () => {
+        const isEditing = document.getElementById('editArea').style.display === 'block';
+        document.getElementById('displayArea').style.display = isEditing ? 'block' : 'none';
+        document.getElementById('editArea').style.display = isEditing ? 'none' : 'block';
+        document.getElementById('editToggle').style.display = isEditing ? 'block' : 'none';
+    };
+
+    window.saveChanges = async () => {
+        const btn = document.getElementById('saveBtn');
+        btn.disabled = true;
+        btn.innerText = "Bezig met opslaan...";
+
+        try {
+            await updateDoc(doc(db, "recepten", id), {
+                titel: document.getElementById('editTitle').value,
+                ingredienten: document.getElementById('editIngredients').value,
+                bereiding: document.getElementById('editInstructions').value,
+                foto: document.getElementById('editPhoto').value
+            });
+            location.reload(); // Herlaad de pagina om de wijzigingen te zien
+        } catch (err) {
+            alert("Fout bij opslaan: " + err.message);
+            btn.disabled = false;
+        }
+    };
+
     load();
 </script>
 </body>
