@@ -5,169 +5,67 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recept Detail</title>
     <style>
-        /* Globale Styling */
         body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            margin: 0; 
-            padding: 0; 
-            color: #1f2937; 
+            font-family: 'Segoe UI', sans-serif; 
             background: linear-gradient(135deg, #fce7f3 0%, #f5f3ff 100%); 
-            background-attachment: fixed; 
-            background-repeat: no-repeat;
-            min-height: 100vh;
+            background-attachment: fixed;
+            margin: 0; padding: 10px; color: #1f2937; min-height: 100vh;
         }
         
-        /* Algemene container voor transparantie */
         .app-container { 
-            max-width: 800px; 
-            margin: 40px auto; 
+            max-width: 800px; margin: 40px auto; 
             background: rgba(255, 255, 255, 0.85); 
             backdrop-filter: blur(10px);
-            border-radius: 25px; 
-            padding: 30px; 
+            border-radius: 25px; padding: 30px; 
             box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
             position: relative; 
         }
 
-        .recipe-img { width: 100%; height: 350px; object-fit: cover; background: #eee; border-radius: 15px 15px 0 0; margin-bottom: 20px;}
-        .no-img-placeholder { 
-            height: 150px; 
-            background: linear-gradient(135deg, #fce7f3 0%, #f5f3ff 100%); 
-            display: flex; align-items: center; justify-content: center; 
-            font-size: 60px; color: #8b5cf6; 
-            border-radius: 15px 15px 0 0; margin-bottom: 20px;
-        }
+        .recipe-img { width: 100%; height: 350px; object-fit: cover; border-radius: 15px; margin-bottom: 20px;}
+        .no-img-placeholder { height: 100px; background: #eee; border-radius: 15px; margin-bottom: 20px; }
 
-        .content { padding: 0 10px; } /* Padding al op app-container */
-        
-        .back-link { color: #8b5cf6; font-weight: bold; text-decoration: none; display: inline-block; margin-bottom: 20px; transition: 0.2s; }
-        .back-link:hover { color: #ec4899; }
-        
         h1 { margin: 5px 0; font-size: 28px; color: #374151; }
-        h3 { color: #8b5cf6; border-left: 4px solid #f472b6; padding-left: 12px; margin-top: 25px; font-size: 20px; }
+        h3 { color: #8b5cf6; border-left: 4px solid #f472b6; padding-left: 12px; margin-top: 25px; }
 
-        .text-box { 
-            background: #fafafb; 
-            padding: 15px; 
-            border-radius: 12px; 
-            white-space: pre-wrap; 
-            line-height: 1.6; 
-            border: 1px solid #f0f0f0;
-        }
+        .text-box { background: white; padding: 15px; border-radius: 12px; white-space: pre-wrap; line-height: 1.6; border: 1px solid #f0f0f0; }
 
-        /* Actie knoppen */
-        .share-btn {
-            display: inline-flex;
-            align-items: center;
-            background: #25D366;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: bold;
-            margin-top: 25px;
-            box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
-            transition: 0.3s;
-            font-size: 15px;
-        }
-        .share-btn:hover { transform: scale(1.03); box-shadow: 0 6px 12px rgba(37, 211, 102, 0.4); }
+        /* Funky Score Indicator */
+        .rating-section { margin-top: 35px; text-align: center; padding: 20px; background: white; border-radius: 20px; border: 1px solid #f3f4f6; }
+        .stars { font-size: 35px; cursor: pointer; color: #d1d5db; margin-bottom: 10px; }
+        .stars span.active { color: #fbbf24; }
 
-        .edit-btn { 
-            position: absolute; top: 20px; right: 20px; 
-            background: rgba(255,255,255,0.7); 
-            color: #8b5cf6; border: 1px solid #ddd; 
-            padding: 8px 15px; border-radius: 15px; 
-            font-weight: bold; cursor: pointer; z-index: 20;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            transition: 0.2s;
+        .slice-container {
+            width: 100%; max-width: 400px; height: 14px; background: #e5e7eb;
+            border-radius: 10px; margin: 30px auto; position: relative;
         }
-        .edit-btn:hover { background: white; transform: translateY(-1px); }
-        
-        /* Bewerk sectie */
-        input, textarea, select { 
-            width: 100%; padding: 12px; margin-top: 8px; 
-            border: 1px solid #ddd; border-radius: 10px; 
-            box-sizing: border-box; font-family: inherit; margin-bottom: 10px;
-            background: white;
-        }
-        label { font-size: 14px; font-weight: bold; color: #6b7280; display: block; margin-top: 15px; }
-
-        .save-btn { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; margin-top: 25px; width: 100%; padding: 15px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; box-shadow: 0 8px 15px rgba(16, 185, 129, 0.3); transition: 0.3s; }
-        .save-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(16, 185, 129, 0.4); }
-
-        .delete-btn { background: #fee2e2; color: #ef4444; margin-top: 15px; width: 100%; padding: 12px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.2s; }
-        .delete-btn:hover { background: #fecaca; }
-
-        /* Rating Sectie */
-        .rating-section { 
-            margin-top: 35px; padding: 25px; 
-            background: rgba(255,255,255,0.7); 
-            border-radius: 15px; 
-            text-align: center; 
-            border: 1px solid #f0f0f0;
-        }
-        .stars { 
-            font-size: 35px; 
-            cursor: pointer; 
-            color: #d1d5db; 
-            display: inline-block; 
-            vertical-align: middle; 
-            margin-bottom: 15px;
-        }
-        .stars span { transition: color 0.2s; }
-        .stars span.active { color: #fbbc05; } /* Gele sterren */
-
-        /* Slice Balk Styling voor recept.html */
-        .score-slice-container {
-            width: 80%; /* Iets smaller dan 100% */
-            max-width: 300px;
-            height: 15px; /* Hoger voor duidelijker effect */
-            background: #e0e0e0;
-            border-radius: 10px;
-            margin: 10px auto 10px auto;
-            position: relative;
-            overflow: hidden;
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
-        }
-        .score-slice-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #f7d24a 0%, #fbbc05 100%); /* Gele/Oranje gradient */
-            border-radius: 10px;
-            transition: width 0.8s ease-out; /* Animatie bij het vullen */
-            position: absolute;
-            left: 0;
-            top: 0;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end; /* Emoji aan het einde van de fill */
+        .slice-fill {
+            height: 100%; background: linear-gradient(90deg, #ec4899, #8b5cf6);
+            border-radius: 10px; width: 0%; transition: width 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         .emoji-slicer {
-            font-size: 18px; /* Grotere emoji */
-            line-height: 1;
-            margin-right: -10px; /* Overlap met de balk */
-            transform: translateX(50%); /* Zorgt dat de emoji precies in het midden staat */
-            position: absolute;
-            right: 0;
+            position: absolute; top: -12px; transform: translateX(-50%);
+            font-size: 28px; transition: left 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); left: 0%;
         }
-        .score-status-text {
-            font-size: 16px;
-            color: #6b7280;
-            margin-top: 10px;
-            font-weight: bold;
-        }
+
+        .edit-btn { position: absolute; top: 20px; right: 20px; background: white; border: 1px solid #ddd; padding: 8px 15px; border-radius: 15px; cursor: pointer; font-weight: bold; }
+        .share-btn { display: inline-block; background: #25D366; color: white; padding: 10px 20px; border-radius: 25px; text-decoration: none; margin-top: 20px; font-weight: bold; }
+        .save-btn { background: #10b981; color: white; width: 100%; padding: 15px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 20px; }
+        .delete-btn { background: #fee2e2; color: #ef4444; width: 100%; padding: 10px; border: none; border-radius: 10px; margin-top: 10px; cursor: pointer; }
+
+        input, textarea { width: 100%; padding: 12px; margin-top: 10px; border: 1px solid #ddd; border-radius: 10px; font-family: inherit; box-sizing: border-box; }
     </style>
 </head>
 <body>
 
 <div class="app-container">
-    <button class="edit-btn" id="editToggle" onclick="toggleEdit()">Bewerk ✏️</button>
+    <button class="edit-btn" onclick="toggleEdit()">Bewerk ✏️</button>
 
     <div id="viewMode">
         <div id="recipeImage"></div>
         <div class="content">
-            <a href="index.html" class="back-link">← Terug</a>
+            <a href="index.html" style="text-decoration:none; color:#8b5cf6; font-weight:bold;">← Terug</a>
             <h1 id="title">Laden...</h1>
-            <p id="meta" style="color:#9ca3af; font-size: 13px;"></p>
+            <p id="meta" style="color:#9ca3af; font-size: 14px;"></p>
             
             <h3>Ingrediënten</h3>
             <div id="ingredients" class="text-box"></div>
@@ -175,11 +73,135 @@
             <h3>Bereiding</h3>
             <div id="instructions" class="text-box"></div>
 
-            <a href="#" id="whatsappBtn" class="share-btn" target="_blank">
-                <span style="margin-right:8px;">💬</span> Deel via WhatsApp
-            </a>
+            <a href="#" id="whatsappBtn" class="share-btn" target="_blank">💬 Deel via WhatsApp</a>
 
             <div class="rating-section">
-                <h4>Wat vind jij van dit recept?</h4>
+                <h4>Wat vond je ervan?</h4>
                 <div class="stars" id="starContainer">
-                    <span data-score="1" onclick="rate(1)">☆</span><span data-score="2" onclick="rate(2)">☆</span><span data-score="3" onclick="rate(3)">☆</span><span data-score="4" onclick="rate(4)">☆</span><span data-score="5" onclick
+                    <span onclick="rate(1)">☆</span><span onclick="rate(2)">☆</span><span onclick="rate(3)">☆</span><span onclick="rate(4)">☆</span><span onclick="rate(5)">☆</span>
+                </div>
+                
+                <div class="slice-container">
+                    <div class="slice-fill" id="sliceFill"></div>
+                    <div class="emoji-slicer" id="emojiSlicer">💩</div>
+                </div>
+                <p id="ratingStatus" style="font-weight:bold; color:#6b7280;"></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="editMode" style="display:none;">
+        <h3>Recept Aanpassen</h3>
+        <label>Titel</label><input type="text" id="editTitle">
+        <label>Chef</label><input type="text" id="editChef">
+        <label>Ingrediënten</label><textarea id="editIngredients" rows="6"></textarea>
+        <label>Bereiding</label><textarea id="editInstructions" rows="8"></textarea>
+        <label>Foto URL</label><input type="url" id="editPhoto">
+        <button class="save-btn" onclick="saveChanges()">Opslaan ✅</button>
+        <button class="delete-btn" onclick="deleteRecipe()">Verwijder Recept 🗑️</button>
+        <button style="background:none; border:none; color:#9ca3af; cursor:pointer; width:100%; margin-top:10px;" onclick="toggleEdit()">Annuleren</button>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, doc, getDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBzsxSTQKhhh8yKb4AFew7zQz26BMNKfHw",
+        authDomain: "mijnkookapp2.firebaseapp.com",
+        projectId: "mijnkookapp2",
+        storageBucket: "mijnkookapp2.firebasestorage.app",
+        messagingSenderId: "77365526386",
+        appId: "1:77365526386:web:faa6d99632dae10b4d67eb"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const id = new URLSearchParams(window.location.search).get('id');
+
+    async function load() {
+        const snap = await getDoc(doc(db, "recepten", id));
+        if (snap.exists()) {
+            const r = snap.data();
+            document.getElementById('title').innerText = r.titel;
+            document.getElementById('meta').innerText = `${r.type} | Chef: ${r.chef}`;
+            document.getElementById('ingredients').innerText = r.ingredienten;
+            document.getElementById('instructions').innerText = r.bereiding;
+            document.getElementById('recipeImage').innerHTML = r.foto ? `<img src="${r.foto}" class="recipe-img">` : `<div class="no-img-placeholder"></div>`;
+            
+            // WhatsApp Link
+            const shareUrl = window.location.href;
+            document.getElementById('whatsappBtn').href = `https://wa.me/?text=Check dit recept voor ${r.titel}! 😋 ${shareUrl}`;
+
+            // Initialiseer Score Balk
+            updateScoreUI(r.gemiddeldeScore || 0);
+
+            // Bewerk velden
+            document.getElementById('editTitle').value = r.titel;
+            document.getElementById('editChef').value = r.chef;
+            document.getElementById('editIngredients').value = r.ingredienten;
+            document.getElementById('editInstructions').value = r.bereiding;
+            document.getElementById('editPhoto').value = r.foto || "";
+        }
+    }
+
+    function updateScoreUI(score) {
+        const percentage = (score / 5) * 100;
+        document.getElementById('sliceFill').style.width = percentage + "%";
+        document.getElementById('emojiSlicer').style.left = percentage + "%";
+        
+        let emoji = "💩";
+        if(score >= 1) emoji = "🤨";
+        if(score >= 2) emoji = "😋";
+        if(score >= 3.5) emoji = "🤩";
+        if(score >= 4.5) emoji = "👑";
+        
+        document.getElementById('emojiSlicer').innerText = emoji;
+        document.getElementById('ratingStatus').innerText = score > 0 ? `Gemiddelde: ${score} / 5` : "Nog geen stemmen";
+    }
+
+    window.rate = async (newScore) => {
+        const snap = await getDoc(doc(db, "recepten", id));
+        const r = snap.data();
+        const totaal = (r.totaalScores || 0) + newScore;
+        const stemmen = (r.aantalStemmen || 0) + 1;
+        const gemiddelde = (totaal / stemmen).toFixed(1);
+
+        await updateDoc(doc(db, "recepten", id), {
+            totaalScores: totaal,
+            aantalStemmen: stemmen,
+            gemiddeldeScore: parseFloat(gemiddelde)
+        });
+        updateScoreUI(gemiddelde);
+    };
+
+    window.toggleEdit = () => {
+        const v = document.getElementById('viewMode');
+        const e = document.getElementById('editMode');
+        v.style.display = v.style.display === "none" ? "block" : "none";
+        e.style.display = e.style.display === "none" ? "block" : "none";
+    };
+
+    window.saveChanges = async () => {
+        await updateDoc(doc(db, "recepten", id), {
+            titel: document.getElementById('editTitle').value,
+            chef: document.getElementById('editChef').value,
+            ingredienten: document.getElementById('editIngredients').value,
+            bereiding: document.getElementById('editInstructions').value,
+            foto: document.getElementById('editPhoto').value
+        });
+        location.reload();
+    };
+
+    window.deleteRecipe = async () => {
+        if(confirm("Echt verwijderen?")) {
+            await deleteDoc(doc(db, "recepten", id));
+            window.location.href = "index.html";
+        }
+    };
+
+    load();
+</script>
+</body>
+</html>
