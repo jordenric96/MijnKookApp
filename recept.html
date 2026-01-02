@@ -37,13 +37,11 @@
         h1 { font-family: 'Playfair Display', serif; font-size: clamp(24px, 7vw, 40px); color: #1f2937; margin: 10px 0; }
         .tag { background: #fdf2f8; color: #ec4899; padding: 4px 12px; border-radius: 15px; font-size: 12px; font-weight: 600; display: inline-block; }
 
-        /* Actie Balk */
         .action-bar { display: flex; gap: 10px; margin: 20px 0; overflow-x: auto; padding-bottom: 10px; }
         .action-item { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: #8b5cf6; width: 75px; cursor: pointer; }
         .action-icon { width: 45px; height: 45px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
         .active-mode { background: #8b5cf6 !important; color: white !important; }
 
-        /* Timer */
         .timer-link { color: #8b5cf6; font-weight: 600; text-decoration: underline; cursor: pointer; background: #f5f3ff; padding: 2px 6px; border-radius: 6px; }
         #active-timer-overlay {
             position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
@@ -51,25 +49,22 @@
             display: none; align-items: center; gap: 15px; z-index: 2000;
         }
 
-        /* Calculator */
         .calculator-box { background: #f9fafb; padding: 15px; border-radius: 20px; margin: 20px 0; display: flex; align-items: center; justify-content: space-between; font-size: 14px; }
         .calc-btn { width: 32px; height: 32px; border-radius: 50%; border: none; background: #8b5cf6; color: white; cursor: pointer; font-size: 18px; }
 
-        /* Ingrediënten */
         .ingredient-item { display: flex; align-items: center; margin-bottom: 10px; padding: 8px 0; border-bottom: 1px solid #f3f4f6; cursor: pointer; }
         .ingredient-item input { margin-right: 12px; width: 22px; height: 22px; accent-color: #8b5cf6; }
         .ingredient-item.checked span { text-decoration: line-through; opacity: 0.5; }
 
-        /* Rating */
         .rating-section { border-top: 1px solid #eee; padding-top: 30px; margin-top: 40px; text-align: center; }
         .slider-wrapper { position: relative; width: 90%; margin: 50px auto 30px auto; }
         input[type="range"] { -webkit-appearance: none; width: 100%; height: 8px; border-radius: 5px; background: #e5e7eb; outline: none; }
         input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 44px; height: 44px; cursor: grab; }
         #emoji-display { position: absolute; top: -18px; font-size: 40px; transform: translateX(-50%); pointer-events: none; transition: left 0.1s; }
 
-        /* Knoppen */
         .edit-btn { position: absolute; top: 15px; right: 15px; background: white; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 600; box-shadow: 0 4px 10px rgba(0,0,0,0.1); z-index: 100; cursor: pointer; }
         .btn-main { background: var(--primary-gradient); color: white; border: none; padding: 15px 30px; border-radius: 25px; font-weight: 600; width: 100%; cursor: pointer; font-size: 16px; }
+        .btn-delete { background: #fee2e2; color: #ef4444; border: none; padding: 12px; border-radius: 15px; width: 100%; font-weight: 600; cursor: pointer; margin-top: 10px; }
 
         input, textarea { width: 100%; padding: 12px; margin-top: 8px; border: 1px solid #ddd; border-radius: 12px; font-family: inherit; box-sizing: border-box; }
     </style>
@@ -140,17 +135,18 @@
         <input type="text" id="editTitle" placeholder="Titel">
         <input type="text" id="editChef" placeholder="Chef">
         <input type="number" id="editBase" placeholder="Aantal personen">
-        <textarea id="editIngredients" rows="6" placeholder="Ingrediënten (scheid met komma)"></textarea>
+        <textarea id="editIngredients" rows="6" placeholder="Ingrediënten (komma per item)"></textarea>
         <textarea id="editInstructions" rows="10" placeholder="Bereiding"></textarea>
         <input type="url" id="editPhoto" placeholder="Foto URL">
         <button class="btn-main" onclick="saveChanges()">Opslaan ✅</button>
+        <button class="btn-delete" onclick="deleteRecipe()">Verwijder Recept 🗑️</button>
         <button onclick="toggleEdit()" style="width:100%; background:none; border:none; color:#9ca3af; margin-top:15px; cursor:pointer;">Annuleren</button>
     </div>
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyBzsxSTQKhhh8yKb4AFew7zQz26BMNKfHw",
@@ -247,6 +243,18 @@
                 location.reload();
             }
         } catch (err) { alert("Fout bij versturen."); }
+    };
+
+    window.deleteRecipe = async () => {
+        const pw = prompt("Wachtwoord vereist om te verwijderen:\nTip: Club+ontstaan");
+        if (pw === "RSCA1998") {
+            if (confirm("Weet je het zeker? Dit kan niet ongedaan worden gemaakt.")) {
+                await deleteDoc(doc(db, "recepten", id));
+                window.location.href = "index.html";
+            }
+        } else if (pw !== null) {
+            alert("Fout wachtwoord! Recept niet verwijderd.");
+        }
     };
 
     window.toggleWakeLock = async () => {
