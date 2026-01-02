@@ -44,8 +44,25 @@
             border: 1px solid #f0f0f0;
         }
 
-        /* Bewerk sectie */
+        /* Actie knoppen */
+        .share-btn {
+            display: inline-flex;
+            align-items: center;
+            background: #25D366;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 20px;
+            box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
+            transition: 0.3s;
+        }
+        .share-btn:hover { transform: scale(1.05); }
+
         .edit-btn { position: absolute; top: 15px; right: 15px; background: white; color: #8b5cf6; border: 1px solid #ddd; padding: 8px 15px; border-radius: 15px; font-weight: bold; cursor: pointer; z-index: 20; }
+        
+        /* Bewerk sectie */
         input, textarea { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-family: inherit; margin-bottom: 10px; }
         label { font-size: 14px; font-weight: bold; color: #6b7280; display: block; margin-top: 10px; }
 
@@ -70,6 +87,10 @@
 
             <h3>Bereiding</h3>
             <div id="instructions" class="text-box"></div>
+
+            <a href="#" id="whatsappBtn" class="share-btn" target="_blank">
+                <span style="margin-right:8px;">💬</span> Deel via WhatsApp
+            </a>
         </div>
     </div>
 
@@ -88,7 +109,7 @@
         <label>Bereiding</label>
         <textarea id="editInstructions" rows="8"></textarea>
         
-        <label>Foto URL (Directe link eindigend op .jpg of .png)</label>
+        <label>Foto URL (bijv. van Imgur)</label>
         <input type="url" id="editPhoto">
 
         <button class="save-btn" onclick="saveChanges()">Wijzigingen Opslaan</button>
@@ -119,12 +140,20 @@
         const snap = await getDoc(doc(db, "recepten", id));
         if (snap.exists()) {
             const r = snap.data();
-            document.getElementById('title').innerText = r.titel;
+            const pageTitle = r.titel;
+            
+            document.getElementById('title').innerText = pageTitle;
             document.getElementById('meta').innerText = `${r.type} | Chef: ${r.chef}`;
             document.getElementById('ingredients').innerText = r.ingredienten;
             document.getElementById('instructions').innerText = r.bereiding;
             document.getElementById('recipeImage').innerHTML = r.foto ? `<img src="${r.foto}" class="recipe-img">` : `<div class="no-img-placeholder"></div>`;
 
+            // WhatsApp link maken
+            const shareUrl = window.location.href;
+            const shareText = encodeURIComponent(`Kijk dit lekkere recept voor ${pageTitle} in mijn Kook App! 😋: `);
+            document.getElementById('whatsappBtn').href = `https://wa.me/?text=${shareText}${shareUrl}`;
+
+            // Bewerkvelden vullen
             document.getElementById('editTitle').value = r.titel;
             document.getElementById('editChef').value = r.chef || "";
             document.getElementById('editIngredients').value = r.ingredienten;
