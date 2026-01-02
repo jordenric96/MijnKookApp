@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recept Detail</title>
     <style>
-        /* Zachte gradient over de hele pagina */
         body { 
             font-family: 'Segoe UI', sans-serif; 
             background: linear-gradient(135deg, #fdf2f8 0%, #f5f3ff 100%); 
@@ -47,7 +46,8 @@
 
         /* Bewerk sectie */
         .edit-btn { position: absolute; top: 15px; right: 15px; background: white; color: #8b5cf6; border: 1px solid #ddd; padding: 8px 15px; border-radius: 15px; font-weight: bold; cursor: pointer; z-index: 20; }
-        input, textarea { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-family: inherit; }
+        input, textarea { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-family: inherit; margin-bottom: 10px; }
+        label { font-size: 14px; font-weight: bold; color: #6b7280; display: block; margin-top: 10px; }
 
         .save-btn { background: #10b981; color: white; margin-top: 20px; width: 100%; padding: 15px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; }
         .delete-btn { background: #fee2e2; color: #ef4444; margin-top: 15px; width: 100%; padding: 12px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
@@ -78,6 +78,9 @@
         
         <label>Naam Gerecht</label>
         <input type="text" id="editTitle">
+
+        <label>Naam van de Chef (Auteur)</label>
+        <input type="text" id="editChef" placeholder="Jouw naam">
         
         <label>Ingrediënten</label>
         <textarea id="editIngredients" rows="6"></textarea>
@@ -85,7 +88,7 @@
         <label>Bereiding</label>
         <textarea id="editInstructions" rows="8"></textarea>
         
-        <label>Foto URL</label>
+        <label>Foto URL (Directe link eindigend op .jpg of .png)</label>
         <input type="url" id="editPhoto">
 
         <button class="save-btn" onclick="saveChanges()">Wijzigingen Opslaan</button>
@@ -116,15 +119,14 @@
         const snap = await getDoc(doc(db, "recepten", id));
         if (snap.exists()) {
             const r = snap.data();
-            // Kijk modus
             document.getElementById('title').innerText = r.titel;
             document.getElementById('meta').innerText = `${r.type} | Chef: ${r.chef}`;
             document.getElementById('ingredients').innerText = r.ingredienten;
             document.getElementById('instructions').innerText = r.bereiding;
             document.getElementById('recipeImage').innerHTML = r.foto ? `<img src="${r.foto}" class="recipe-img">` : `<div class="no-img-placeholder"></div>`;
 
-            // Bewerk modus
             document.getElementById('editTitle').value = r.titel;
+            document.getElementById('editChef').value = r.chef || "";
             document.getElementById('editIngredients').value = r.ingredienten;
             document.getElementById('editInstructions').value = r.bereiding;
             document.getElementById('editPhoto').value = r.foto || "";
@@ -143,6 +145,7 @@
         try {
             await updateDoc(doc(db, "recepten", id), {
                 titel: document.getElementById('editTitle').value,
+                chef: document.getElementById('editChef').value,
                 ingredienten: document.getElementById('editIngredients').value,
                 bereiding: document.getElementById('editInstructions').value,
                 foto: document.getElementById('editPhoto').value
