@@ -11,7 +11,7 @@
             background: linear-gradient(135deg, #fdf2f8 0%, #f5f3ff 100%); 
             background-attachment: fixed;
             margin: 0; 
-            padding: 20px; 
+            padding: 10px; 
             color: #1f2937; 
             min-height: 100vh;
         }
@@ -19,80 +19,77 @@
         .container { 
             max-width: 800px; 
             margin: 20px auto; 
-            background: rgba(255, 255, 255, 0.95); 
-            backdrop-filter: blur(10px);
-            border-radius: 30px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
+            background: white; 
+            border-radius: 20px; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08); 
             overflow: hidden; 
             position: relative; 
         }
 
-        /* Foto sectie */
-        .recipe-img { width: 100%; height: 400px; object-fit: cover; background: #eee; border-bottom: 1px solid #f3f4f6; }
-        .no-img-placeholder { height: 100px; background: linear-gradient(135deg, #fce7f3 0%, #f5f3ff 100%); }
+        .recipe-img { width: 100%; height: 350px; object-fit: cover; background: #eee; border-bottom: 1px solid #f3f4f6; }
+        .no-img-placeholder { height: 20px; background: #f5f3ff; }
 
-        .content { padding: 40px; }
+        .content { padding: 30px; }
         
-        .back-link { color: #8b5cf6; font-weight: bold; text-decoration: none; display: inline-block; margin-bottom: 20px; transition: 0.2s; }
-        .back-link:hover { color: #ec4899; }
+        .back-link { color: #8b5cf6; font-weight: bold; text-decoration: none; display: inline-block; margin-bottom: 20px; }
         
-        h1 { margin: 10px 0; font-size: 32px; color: #4b5563; }
-        h3 { color: #8b5cf6; border-left: 4px solid #f472b6; padding-left: 15px; margin-top: 25px; }
+        h1 { margin: 5px 0; font-size: 28px; color: #374151; }
+        h3 { color: #8b5cf6; border-left: 4px solid #f472b6; padding-left: 12px; margin-top: 25px; }
 
         .text-box { 
-            background: #fff; 
-            padding: 20px; 
-            border-radius: 15px; 
+            background: #fafafb; 
+            padding: 15px; 
+            border-radius: 12px; 
             white-space: pre-wrap; 
             line-height: 1.6; 
-            border: 1px solid #f3f4f6;
+            border: 1px solid #f0f0f0;
         }
 
         /* Bewerk sectie */
-        .edit-btn { position: absolute; top: 20px; right: 20px; background: white; color: #8b5cf6; border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1); z-index: 20; }
-        input, textarea, select { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-size: 16px; font-family: inherit; }
-        label { display: block; margin-top: 15px; font-weight: bold; color: #6b7280; }
+        .edit-btn { position: absolute; top: 15px; right: 15px; background: white; color: #8b5cf6; border: 1px solid #ddd; padding: 8px 15px; border-radius: 15px; font-weight: bold; cursor: pointer; z-index: 20; }
+        input, textarea { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-family: inherit; }
 
-        .save-btn { background: #10b981; color: white; margin-top: 20px; width: 100%; padding: 15px; border-radius: 15px; border: none; font-weight: bold; cursor: pointer; font-size: 16px; }
-        .delete-btn { background: none; color: #ef4444; margin-top: 15px; width: 100%; padding: 10px; border: 1px solid #ef4444; border-radius: 15px; font-weight: bold; cursor: pointer; font-size: 14px; }
+        .save-btn { background: #10b981; color: white; margin-top: 20px; width: 100%; padding: 15px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; }
+        .delete-btn { background: #fee2e2; color: #ef4444; margin-top: 15px; width: 100%; padding: 12px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
 
-<div class="container" id="mainContainer">
-    <button class="edit-btn" id="editToggle" onclick="toggleEdit()">Bewerk Recept ✏️</button>
+<div class="container">
+    <button class="edit-btn" id="editToggle" onclick="toggleEdit()">Bewerk ✏️</button>
 
     <div id="viewMode">
         <div id="recipeImage"></div>
         <div class="content">
-            <a href="index.html" class="back-link">← Terug naar overzicht</a>
+            <a href="index.html" class="back-link">← Terug</a>
             <h1 id="title">Laden...</h1>
-            <p id="meta" style="color:#9ca3af; font-weight:bold; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;"></p>
+            <p id="meta" style="color:#9ca3af; font-size: 13px;"></p>
             
             <h3>Ingrediënten</h3>
             <div id="ingredients" class="text-box"></div>
 
-            <h3>Bereidingswijze</h3>
+            <h3>Bereiding</h3>
             <div id="instructions" class="text-box"></div>
         </div>
     </div>
 
     <div id="editMode" class="content" style="display:none;">
-        <h2 style="color:#8b5cf6;">Recept Aanpassen</h2>
-        <label>Naam van het gerecht</label>
+        <h2 style="color:#8b5cf6; margin-top:0;">Aanpassen</h2>
+        
+        <label>Naam Gerecht</label>
         <input type="text" id="editTitle">
         
         <label>Ingrediënten</label>
-        <textarea id="editIngredients" rows="8"></textarea>
+        <textarea id="editIngredients" rows="6"></textarea>
         
-        <label>Bereidingswijze</label>
-        <textarea id="editInstructions" rows="10"></textarea>
+        <label>Bereiding</label>
+        <textarea id="editInstructions" rows="8"></textarea>
         
-        <label>Foto URL (bijv. van Postimages.org)</label>
-        <input type="url" id="editPhoto" placeholder="https://...">
+        <label>Foto URL</label>
+        <input type="url" id="editPhoto">
 
-        <button class="save-btn" onclick="saveChanges()">Wijzigingen Opslaan ✅</button>
-        <button class="delete-btn" onclick="deleteRecipe()">Recept definitief verwijderen 🗑️</button>
+        <button class="save-btn" onclick="saveChanges()">Wijzigingen Opslaan</button>
+        <button class="delete-btn" onclick="deleteRecipe()">🗑️ Verwijder dit recept</button>
         <button style="background:none; border:none; color:#9ca3af; cursor:pointer; width:100%; margin-top:15px;" onclick="toggleEdit()">Annuleren</button>
     </div>
 </div>
@@ -112,19 +109,21 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    const recipeId = new URLSearchParams(window.location.search).get('id');
+    const id = new URLSearchParams(window.location.search).get('id');
 
-    async function loadRecipe() {
-        const snap = await getDoc(doc(db, "recepten", recipeId));
+    async function load() {
+        if (!id) return;
+        const snap = await getDoc(doc(db, "recepten", id));
         if (snap.exists()) {
             const r = snap.data();
+            // Kijk modus
             document.getElementById('title').innerText = r.titel;
             document.getElementById('meta').innerText = `${r.type} | Chef: ${r.chef}`;
             document.getElementById('ingredients').innerText = r.ingredienten;
             document.getElementById('instructions').innerText = r.bereiding;
             document.getElementById('recipeImage').innerHTML = r.foto ? `<img src="${r.foto}" class="recipe-img">` : `<div class="no-img-placeholder"></div>`;
 
-            // Bewerkvelden
+            // Bewerk modus
             document.getElementById('editTitle').value = r.titel;
             document.getElementById('editIngredients').value = r.ingredienten;
             document.getElementById('editInstructions').value = r.bereiding;
@@ -135,17 +134,14 @@
     window.toggleEdit = () => {
         const view = document.getElementById('viewMode');
         const edit = document.getElementById('editMode');
-        const btn = document.getElementById('editToggle');
         const isEditing = view.style.display === "none";
-        
         view.style.display = isEditing ? "block" : "none";
         edit.style.display = isEditing ? "none" : "block";
-        btn.style.display = isEditing ? "block" : "none";
     };
 
     window.saveChanges = async () => {
         try {
-            await updateDoc(doc(db, "recepten", recipeId), {
+            await updateDoc(doc(db, "recepten", id), {
                 titel: document.getElementById('editTitle').value,
                 ingredienten: document.getElementById('editIngredients').value,
                 bereiding: document.getElementById('editInstructions').value,
@@ -156,14 +152,13 @@
     };
 
     window.deleteRecipe = async () => {
-        if (confirm("Weet je dit zeker? Het recept wordt voor altijd verwijderd.")) {
-            await deleteDoc(doc(db, "recepten", recipeId));
+        if (confirm("Weet je het heel zeker? Weg = Weg!")) {
+            await deleteDoc(doc(db, "recepten", id));
             window.location.href = "index.html";
         }
     };
 
-    loadRecipe();
+    load();
 </script>
-
 </body>
 </html>
