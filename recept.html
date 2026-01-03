@@ -6,143 +6,110 @@
     <title>Recept Detail - Loemek Kitchen</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
+        * { box-sizing: border-box; }
         :root {
             --primary-gradient: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
             --soft-bg: linear-gradient(135deg, #fce7f3 0%, #f5f3ff 100%);
         }
-
         body { font-family: 'Poppins', sans-serif; background: var(--soft-bg) no-repeat fixed; margin: 0; padding: 0; color: #374151; min-height: 100vh; }
-        .app-container { max-width: 850px; margin: 0 auto; background: rgba(255, 255, 255, 0.95); min-height: 100vh; position: relative; box-shadow: 0 0 30px rgba(0,0,0,0.05); }
+        .app-container { max-width: 850px; margin: 0 auto; background: rgba(255, 255, 255, 0.98); min-height: 100vh; position: relative; box-shadow: 0 0 30px rgba(0,0,0,0.05); }
         @media (min-width: 600px) { .app-container { margin: 20px auto; min-height: auto; border-radius: 30px; overflow: hidden; } }
-
-        .recipe-img { width: 100%; height: 250px; object-fit: cover; border-bottom: 4px solid #fce7f3; }
+        
+        .recipe-img { width: 100%; height: 300px; object-fit: cover; border-bottom: 4px solid #fce7f3; }
         .content { padding: 25px; }
-        h1 { font-family: 'Playfair Display', serif; font-size: clamp(24px, 7vw, 40px); color: #1f2937; margin: 10px 0; }
-        .tag { background: #fdf2f8; color: #ec4899; padding: 4px 12px; border-radius: 15px; font-size: 12px; font-weight: 600; display: inline-block; }
-
-        .theme-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0; background: #f9fafb; padding: 12px; border-radius: 15px; border: 1px solid #eee; }
-        .theme-item { display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; }
-        .theme-item input { width: auto; margin: 0; accent-color: #8b5cf6; }
-
-        .action-bar { display: flex; gap: 10px; margin: 20px 0; overflow-x: auto; padding-bottom: 10px; }
-        .action-item { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: #8b5cf6; width: 75px; cursor: pointer; }
-        .action-icon { width: 45px; height: 45px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
-        .active-mode { background: #8b5cf6 !important; color: white !important; }
-
-        .calculator-box { background: #f9fafb; padding: 15px; border-radius: 20px; margin: 20px 0; display: flex; align-items: center; justify-content: space-between; font-size: 14px; }
-        .calc-btn { width: 32px; height: 32px; border-radius: 50%; border: none; background: #8b5cf6; color: white; cursor: pointer; font-size: 18px; }
-
-        /* Ingrediënten styling */
-        .ingredient-item { display: flex; align-items: center; margin-bottom: 10px; padding: 8px 0; border-bottom: 1px solid #f3f4f6; cursor: pointer; }
-        .ingredient-item input { margin-right: 12px; width: 22px; height: 22px; accent-color: #8b5cf6; }
+        
+        h1 { font-family: 'Playfair Display', serif; font-size: clamp(26px, 7vw, 38px); margin: 10px 0; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .chef-tag { color: #ec4899; font-weight: 600; font-size: 14px; margin-bottom: 20px; }
+        
+        /* Calculator */
+        .calculator-box { background: #fdf2f8; padding: 15px; border-radius: 20px; margin: 20px 0; display: flex; align-items: center; justify-content: space-between; border: 1px solid #fce7f3; }
+        .calc-btn { width: 35px; height: 35px; border-radius: 50%; border: none; background: var(--primary-gradient); color: white; cursor: pointer; font-size: 20px; font-weight: bold; }
+        
+        /* Ingrediënten */
+        .ing-header { font-weight: bold; margin: 25px 0 10px 0; color: #8b5cf6; font-size: 16px; border-left: 4px solid #ec4899; padding-left: 12px; }
+        .ingredient-item { display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid #f3f4f6; }
+        .ingredient-item input { width: 20px; height: 20px; accent-color: #ec4899; margin-right: 12px; }
         .ingredient-item.checked span { text-decoration: line-through; opacity: 0.5; }
-        .ing-header { font-weight: bold; margin: 18px 0 8px 0; color: #8b5cf6; font-size: 15px; border-left: 4px solid #ec4899; padding-left: 10px; }
+        
+        /* Bereiding */
+        .instruction-text { line-height: 1.8; white-space: pre-wrap; color: #4b5563; font-size: 15px; }
+        .timer-link { color: #8b5cf6; font-weight: 600; text-decoration: underline; cursor: pointer; background: #f5f3ff; padding: 2px 8px; border-radius: 8px; border: 1px solid #ddd6fe; }
+        
+        /* Edit Mode Styles */
+        .edit-btn { position: absolute; top: 15px; right: 15px; background: white; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 600; box-shadow: 0 4px 10px rgba(0,0,0,0.1); z-index: 100; cursor: pointer; color: #8b5cf6; }
+        input, textarea { width: 100%; padding: 12px; margin-top: 8px; border: 2px solid #f3f4f6; border-radius: 12px; font-family: inherit; }
+        .theme-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 10px 0; background: #f9fafb; padding: 15px; border-radius: 15px; }
+        .theme-item { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+        .btn-save { background: var(--primary-gradient); color: white; border: none; padding: 15px; border-radius: 25px; width: 100%; font-weight: 600; cursor: pointer; margin-top: 20px; }
+        .btn-delete { background: #fee2e2; color: #ef4444; border: none; padding: 12px; border-radius: 15px; width: 100%; font-weight: 600; margin-top: 10px; cursor: pointer; }
 
-        .rating-section { border-top: 1px solid #eee; padding-top: 30px; margin-top: 40px; text-align: center; }
-        .slider-wrapper { position: relative; width: 90%; margin: 50px auto 30px auto; }
-        input[type="range"] { -webkit-appearance: none; width: 100%; height: 8px; border-radius: 5px; background: #e5e7eb; outline: none; }
-        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 44px; height: 44px; cursor: grab; }
-        #emoji-display { position: absolute; top: -18px; font-size: 40px; transform: translateX(-50%); pointer-events: none; transition: left 0.1s; }
-
-        .edit-btn { position: absolute; top: 15px; right: 15px; background: white; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 600; box-shadow: 0 4px 10px rgba(0,0,0,0.1); z-index: 100; cursor: pointer; }
-        .btn-main { background: var(--primary-gradient); color: white; border: none; padding: 15px 30px; border-radius: 25px; font-weight: 600; width: 100%; cursor: pointer; font-size: 16px; margin-top: 10px; }
-        .btn-delete { background: #fee2e2; color: #ef4444; border: none; padding: 12px; border-radius: 15px; width: 100%; font-weight: 600; cursor: pointer; margin-top: 10px; }
-
-        input, textarea { width: 100%; padding: 12px; margin-top: 8px; border: 1px solid #ddd; border-radius: 12px; font-family: inherit; box-sizing: border-box; }
-        .timer-link { color: #8b5cf6; font-weight: 600; text-decoration: underline; cursor: pointer; background: #f5f3ff; padding: 2px 6px; border-radius: 6px; }
-        #active-timer-overlay { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #1f2937; color: white; padding: 12px 25px; border-radius: 50px; display: none; align-items: center; gap: 15px; z-index: 2000; }
+        /* Timer Overlay */
+        #active-timer { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); background: #1f2937; color: white; padding: 15px 25px; border-radius: 50px; display: none; align-items: center; gap: 15px; z-index: 2000; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
     </style>
 </head>
 <body>
 
-<audio id="alarmSound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
-
-<div id="active-timer-overlay">
+<div id="active-timer">
     <span>⏱️ <span id="timer-display">00:00</span></span>
-    <button onclick="stopTimer()" style="background:#ef4444; border:none; color:white; padding:6px 15px; border-radius:20px; font-weight:bold; cursor:pointer;">STOP</button>
+    <button onclick="stopTimer()" style="background:#ef4444; border:none; color:white; padding:6px 12px; border-radius:15px; font-weight:bold; cursor:pointer;">STOP</button>
 </div>
 
 <div class="app-container">
-    <button class="edit-btn" onclick="toggleEdit()">Edit ✏️</button>
+    <button class="edit-btn" onclick="toggleEdit()">Bewerk ✏️</button>
 
     <div id="viewMode">
         <div id="recipeImage"></div>
         <div class="content">
-            <a href="index.html" style="text-decoration:none; color:#8b5cf6; font-weight:600;">← Terug</a>
+            <a href="index.html" style="text-decoration:none; color:#8b5cf6; font-weight:600;">← Terug naar menu</a>
             <h1 id="title">Laden...</h1>
-            <div id="chefTag" class="tag"></div>
-
-            <div class="action-bar">
-                <div class="action-item" onclick="toggleWakeLock()" id="wakeLockBtn">
-                    <div class="action-icon" id="wakeLockIcon">💡</div>
-                    <span>Kookmodus</span>
-                </div>
-                <div class="action-item" onclick="window.print()">
-                    <div class="action-icon">🖨️</div>
-                    <span>Printen</span>
-                </div>
-                <div class="action-item" id="whatsappBtn">
-                    <div class="action-icon">💬</div>
-                    <span>WhatsApp</span>
-                </div>
-            </div>
+            <div id="chefTag" class="chef-tag"></div>
 
             <div class="calculator-box">
-                <b>Voor:</b>
-                <div style="display:flex; align-items:center; gap:12px;">
+                <b>Aantal personen:</b>
+                <div style="display:flex; align-items:center; gap:15px;">
                     <button class="calc-btn" onclick="changeServings(-1)">−</button>
                     <b id="servingsDisplay">4</b>
                     <button class="calc-btn" onclick="changeServings(1)">+</button>
                 </div>
-                <b>personen</b>
             </div>
-            
+
             <h3>Ingrediënten</h3>
             <div id="ingredientsList"></div>
 
-            <h3>Bereiding</h3>
-            <div id="instructions" style="line-height:1.8; white-space:pre-wrap;"></div>
-
-            <div class="rating-section">
-                <div class="slider-wrapper">
-                    <div id="emoji-display">😐</div>
-                    <input type="range" id="scoreSlider" min="0" max="5" step="0.1" value="2.5">
-                </div>
-                <button class="btn-main" onclick="submitRating()">Verstuur Smaak-oordeel 🚀</button>
-                <p id="avgDisplay" style="margin-top:15px; font-size:13px; color:#9ca3af;"></p>
-            </div>
+            <h3>Bereidingswijze</h3>
+            <div id="instructions" class="instruction-text"></div>
         </div>
     </div>
 
-    <div id="editMode" class="content" style="display:none; padding-bottom: 40px;">
-        <h2>Bewerken ✏️</h2>
+    <div id="editMode" class="content" style="display:none; padding-bottom: 50px;">
+        <h2>Recept Bewerken</h2>
         <label>Titel</label><input type="text" id="editTitle">
         <label>Chef</label><input type="text" id="editChef">
         <label>Basis personen</label><input type="number" id="editBase">
         
-        <label>Thema's (meerdere mogelijk)</label>
+        <label>Thema's</label>
         <div class="theme-grid" id="editThemeGrid">
             <label class="theme-item"><input type="checkbox" value="Hapjes"> Hapjes</label>
             <label class="theme-item"><input type="checkbox" value="Voorgerecht"> Voorgerecht</label>
             <label class="theme-item"><input type="checkbox" value="Hoofdgerecht"> Hoofdgerecht</label>
+            <label class="theme-item"><input type="checkbox" value="Bijgerecht"> Bijgerecht</label>
             <label class="theme-item"><input type="checkbox" value="Dessert"> Dessert</label>
             <label class="theme-item"><input type="checkbox" value="Patisserie"> Patisserie</label>
             <label class="theme-item"><input type="checkbox" value="Sauzen"> Sauzen</label>
-            <label class="theme-item"><input type="checkbox" value="Marinades"> Marinades</label>
             <label class="theme-item"><input type="checkbox" value="Snack"> Snack</label>
         </div>
 
-        <label>Ingrediënten (komma of nieuwe regel. Titels tussen haakjes zetten)</label>
-        <textarea id="editIngredients" rows="6"></textarea>
+        <label>Ingrediënten (Titels tussen haakjes)</label>
+        <textarea id="editIngredients" rows="8"></textarea>
         
         <label>Bereiding</label>
         <textarea id="editInstructions" rows="10"></textarea>
         
         <label>Foto URL</label><input type="url" id="editPhoto">
         
-        <button class="btn-main" onclick="saveChanges()">Opslaan ✅</button>
-        <button class="btn-delete" onclick="deleteRecipe()">Verwijder Recept 🗑️</button>
-        <button onclick="toggleEdit()" style="width:100%; background:none; border:none; color:#9ca3af; margin-top:15px; cursor:pointer;">Annuleren</button>
+        <button class="btn-save" onclick="saveChanges()">Wijzigingen Opslaan ✅</button>
+        <button class="btn-delete" onclick="deleteRecipe()">Recept Verwijderen 🗑️</button>
+        <button onclick="toggleEdit()" style="width:100%; background:none; border:none; color:#9ca3af; margin-top:20px; cursor:pointer;">Annuleren</button>
     </div>
 </div>
 
@@ -150,26 +117,13 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getFirestore, doc, getDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyBzsxSTQKhhh8yKb4AFew7zQz26BMNKfHw",
-        authDomain: "mijnkookapp2.firebaseapp.com",
-        projectId: "mijnkookapp2",
-        storageBucket: "mijnkookapp2.firebasestorage.app",
-        messagingSenderId: "77365526386",
-        appId: "1:77365526386:web:faa6d99632dae10b4d67eb"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+    const firebaseConfig = { apiKey: "AIzaSyBzsxSTQKhhh8yKb4AFew7zQz26BMNKfHw", authDomain: "mijnkookapp2.firebaseapp.com", projectId: "mijnkookapp2", storageBucket: "mijnkookapp2.firebasestorage.app", messagingSenderId: "77365526386", appId: "1:77365526386:web:faa6d99632dae10b4d67eb" };
+    const app = initializeApp(firebaseConfig); const db = getFirestore(app);
     const id = new URLSearchParams(window.location.search).get('id');
 
-    let baseServings = 4;
-    let currentServings = 4;
-    let ingredientStrings = [];
-    let wakeLock = null;
-    let timerInterval = null;
+    let baseServings = 4; let currentServings = 4; let ingredientStrings = []; let timerInterval = null;
 
-    async function load() {
+    async function loadRecipe() {
         const snap = await getDoc(doc(db, "recepten", id));
         if (snap.exists()) {
             const r = snap.data();
@@ -177,36 +131,28 @@
             currentServings = baseServings;
             
             document.getElementById('title').innerText = r.titel;
-            document.getElementById('chefTag').innerText = `👨‍🍳 Chef ${r.chef}`;
+            document.getElementById('chefTag').innerText = `👨‍🍳 Door Chef ${r.chef}`;
             document.getElementById('servingsDisplay').innerText = currentServings;
-            document.getElementById('recipeImage').innerHTML = r.foto ? `<img src="${r.foto}" class="recipe-img">` : ``;
-            document.getElementById('avgDisplay').innerText = `Gemiddelde score: ${r.gemiddeldeScore || 0}`;
+            if(r.foto) document.getElementById('recipeImage').innerHTML = `<img src="${r.foto}" class="recipe-img">`;
 
+            // Bereiding met Timer Fix (behoudt tekst)
             const rawInstructions = r.bereiding;
             document.getElementById('instructions').innerHTML = rawInstructions.replace(/(\d+)\s*(minuten|min|seconden|sec)/gi, (match, p1, p2) => {
-                const totalSeconds = p2.toLowerCase().includes('min') ? p1 * 60 : p1;
-                return `<span class="timer-link" onclick="window.startTimer(${totalSeconds}, '${match}')">${match} ⏱️</span>`;
+                const totalSec = p2.toLowerCase().includes('min') ? p1 * 60 : p1;
+                return `<span class="timer-link" onclick="window.startTimer(${totalSec}, '${match}')">${match} ⏱️</span>`;
             });
 
-            // Splits ingrediënten op komma's of nieuwe regels
-            ingredientStrings = r.ingredienten.split(/[,\n]+/).map(s => s.trim()).filter(s => s !== "");
+            ingredientStrings = r.ingredienten.split('\n').filter(s => s.trim() !== "");
             renderIngredients();
 
+            // Vul Edit Velden
             document.getElementById('editTitle').value = r.titel;
             document.getElementById('editChef').value = r.chef;
             document.getElementById('editBase').value = baseServings;
             document.getElementById('editIngredients').value = r.ingredienten;
             document.getElementById('editInstructions').value = r.bereiding;
             document.getElementById('editPhoto').value = r.foto || "";
-
-            const currentThemes = r.types || [];
-            document.querySelectorAll('#editThemeGrid input').forEach(cb => {
-                cb.checked = currentThemes.includes(cb.value);
-            });
-            
-            document.getElementById('whatsappBtn').onclick = () => {
-                window.open(`https://wa.me/?text=Check dit recept voor ${r.titel}! 😋 ${window.location.href}`);
-            };
+            if(r.types) document.querySelectorAll('#editThemeGrid input').forEach(cb => cb.checked = r.types.includes(cb.value));
         }
     }
 
@@ -216,28 +162,17 @@
         const factor = currentServings / baseServings;
 
         ingredientStrings.forEach(text => {
-            // Check of de regel een titel is: (Tekst)
-            if (text.startsWith('(') && text.endsWith(')')) {
-                const titleDiv = document.createElement('div');
-                titleDiv.className = 'ing-header';
-                titleDiv.innerText = text;
-                container.appendChild(titleDiv);
+            if (text.trim().startsWith('(')) {
+                const h = document.createElement('div'); h.className = 'ing-header';
+                h.innerText = text.trim(); container.appendChild(h);
             } else {
-                const newText = text.replace(/(\d+[\.,]?\d*)/g, (match) => {
-                    const num = parseFloat(match.replace(',', '.'));
-                    return ((num * factor).toFixed(1).replace('.0', '')).replace('.', ',');
+                const newText = text.replace(/(\d+[\.,]?\d*)/g, m => {
+                    const n = parseFloat(m.replace(',', '.'));
+                    return (n * factor).toFixed(1).replace('.0', '').replace('.', ',');
                 });
-
-                const div = document.createElement('div');
-                div.className = 'ingredient-item';
+                const div = document.createElement('div'); div.className = 'ingredient-item';
                 div.innerHTML = `<input type="checkbox"> <span>${newText}</span>`;
-                div.onclick = function(e) { 
-                    if(e.target.type !== 'checkbox') {
-                        const cb = this.querySelector('input');
-                        cb.checked = !cb.checked;
-                    }
-                    this.classList.toggle('checked'); 
-                };
+                div.onclick = function(e) { if(e.target.type !== 'checkbox') this.querySelector('input').checked = !this.querySelector('input').checked; this.classList.toggle('checked'); };
                 container.appendChild(div);
             }
         });
@@ -250,84 +185,25 @@
         renderIngredients();
     };
 
-    window.submitRating = async () => {
-        const score = parseFloat(document.getElementById('scoreSlider').value);
-        try {
-            const snap = await getDoc(doc(db, "recepten", id));
-            if (snap.exists()) {
-                const data = snap.data();
-                const totaal = (data.totaalScores || 0) + score;
-                const stemmen = (data.aantalStemmen || 0) + 1;
-                const gemiddelde = (totaal / stemmen).toFixed(1);
-                await updateDoc(doc(db, "recepten", id), {
-                    totaalScores: totaal,
-                    aantalStemmen: stemmen,
-                    gemiddeldeScore: parseFloat(gemiddelde)
-                });
-                alert("Score verzonden! 🚀");
-                location.reload();
-            }
-        } catch (err) { alert("Fout bij versturen."); }
-    };
-
-    window.saveChanges = async () => {
-        const selectedThemes = [];
-        document.querySelectorAll('#editThemeGrid input:checked').forEach(cb => selectedThemes.push(cb.value));
-
-        await updateDoc(doc(db, "recepten", id), {
-            titel: document.getElementById('editTitle').value,
-            chef: document.getElementById('editChef').value,
-            personen: document.getElementById('editBase').value,
-            types: selectedThemes,
-            ingredienten: document.getElementById('editIngredients').value,
-            bereiding: document.getElementById('editInstructions').value,
-            foto: document.getElementById('editPhoto').value
-        });
-        location.reload();
-    };
-
-    window.deleteRecipe = async () => {
-        const pw = prompt("Wachtwoord vereist om te verwijderen:\nTip: Club+ontstaan");
-        if (pw === "RSCA1998") {
-            if (confirm("Weet je het zeker?")) {
-                await deleteDoc(doc(db, "recepten", id));
-                window.location.href = "index.html";
-            }
-        } else if (pw !== null) { alert("Fout wachtwoord!"); }
-    };
-
-    window.toggleWakeLock = async () => {
-        if ('wakeLock' in navigator) {
-            if (!wakeLock) {
-                wakeLock = await navigator.wakeLock.request('screen');
-                document.getElementById('wakeLockIcon').classList.add('active-mode');
-            } else {
-                await wakeLock.release(); wakeLock = null;
-                document.getElementById('wakeLockIcon').classList.remove('active-mode');
-            }
-        }
-    };
-
     window.startTimer = (seconds, label) => {
         clearInterval(timerInterval);
-        document.getElementById('active-timer-overlay').style.display = 'flex';
+        document.getElementById('active-timer').style.display = 'flex';
         let timeLeft = seconds;
         timerInterval = setInterval(() => {
             timeLeft--;
-            const mins = Math.floor(timeLeft / 60); const secs = timeLeft % 60;
-            document.getElementById('timer-display').innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-            if (timeLeft <= 0) {
-                clearInterval(timerInterval);
-                document.getElementById('alarmSound').play();
-                alert(`Tijd is om: ${label}!`);
+            const m = Math.floor(timeLeft / 60); const s = timeLeft % 60;
+            document.getElementById('timer-display').innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
+            if (timeLeft <= 0) { 
+                clearInterval(timerInterval); 
+                alert("Tijd is om: " + label); 
+                stopTimer();
             }
         }, 1000);
     };
 
     window.stopTimer = () => {
         clearInterval(timerInterval);
-        document.getElementById('alarmSound').pause();
-        document.getElementById('active-timer-overlay').style.display = 'none';
+        document.getElementById('active-timer').style.display = 'none';
     };
 
     window.toggleEdit = () => {
@@ -337,15 +213,31 @@
         window.scrollTo(0,0);
     };
 
-    const slider = document.getElementById('scoreSlider');
-    const emoji = document.getElementById('emoji-display');
-    slider.addEventListener('input', () => {
-        const v = slider.value; emoji.style.left = (v/5*100) + "%";
-        const emojis = ["💩", "🤢", "😐", "🙂", "😋", "🏆"];
-        emoji.innerText = emojis[Math.floor(v)] || "🏆";
-    });
+    window.saveChanges = async () => {
+        const types = []; document.querySelectorAll('#editThemeGrid input:checked').forEach(cb => types.push(cb.value));
+        await updateDoc(doc(db, "recepten", id), {
+            titel: document.getElementById('editTitle').value,
+            chef: document.getElementById('editChef').value,
+            personen: document.getElementById('editBase').value,
+            types: types,
+            ingredienten: document.getElementById('editIngredients').value,
+            bereiding: document.getElementById('editInstructions').value,
+            foto: document.getElementById('editPhoto').value
+        });
+        location.reload();
+    };
 
-    load();
+    window.deleteRecipe = async () => {
+        const pw = prompt("Wachtwoord voor verwijderen:");
+        if (pw === "RSCA1998") {
+            if (confirm("Weet je het zeker? Dit kan niet ongedaan worden gemaakt.")) {
+                await deleteDoc(doc(db, "recepten", id));
+                window.location.href = "index.html";
+            }
+        } else { alert("Fout wachtwoord!"); }
+    };
+
+    loadRecipe();
 </script>
 </body>
 </html>
