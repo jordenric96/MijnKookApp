@@ -10,44 +10,112 @@
         :root {
             --primary-gradient: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
             --soft-bg: linear-gradient(135deg, #fce7f3 0%, #f5f3ff 100%);
+            --border-gradient: linear-gradient(white, white) padding-box, var(--primary-gradient) border-box;
         }
         body { font-family: 'Poppins', sans-serif; background: var(--soft-bg) no-repeat fixed; margin: 0; padding: 0; color: #374151; min-height: 100vh; }
-        .app-container { max-width: 850px; margin: 0 auto; background: rgba(255, 255, 255, 0.98); min-height: 100vh; position: relative; }
-        @media (min-width: 600px) { .app-container { margin: 20px auto; border-radius: 30px; overflow: hidden; box-shadow: 0 0 30px rgba(0,0,0,0.05); } }
         
-        .recipe-img { width: 100%; height: 300px; object-fit: cover; }
+        .app-container { 
+            max-width: 850px; 
+            margin: 0 auto; 
+            background: rgba(255, 255, 255, 0.98); 
+            min-height: 100vh; 
+            position: relative; 
+            border-left: 4px solid #ec4899; /* Accent rand aan de zijkant */
+        }
+        
+        @media (min-width: 600px) { 
+            .app-container { 
+                margin: 20px auto; 
+                border-radius: 30px; 
+                border: 4px solid transparent;
+                background: var(--border-gradient);
+                min-height: auto;
+                box-shadow: 0 15px 35px rgba(139, 92, 246, 0.2);
+            } 
+        }
+        
+        .recipe-img { width: 100%; height: 350px; object-fit: cover; }
         .content { padding: 25px; }
         
-        h1 { font-family: 'Playfair Display', serif; font-size: 32px; margin: 10px 0 5px 0; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .score-display { font-size: 18px; margin-bottom: 5px; }
-        .chef-tag { color: #ec4899; font-weight: 600; font-size: 14px; margin-bottom: 20px; }
+        h1 { font-family: 'Playfair Display', serif; font-size: 34px; margin: 10px 0 20px 0; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .chef-tag { color: #8b5cf6; font-weight: 600; font-size: 15px; margin-bottom: 25px; display: block; }
         
-        /* Action Buttons Row */
-        .action-bar { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
-        .action-btn { background: white; border: 1px solid #f3e8ff; color: #8b5cf6; padding: 8px 15px; border-radius: 12px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .action-btn.active { background: #8b5cf6; color: white; }
+        /* Action Buttons */
+        .action-bar { display: flex; gap: 12px; margin-bottom: 25px; flex-wrap: wrap; }
+        .action-btn { 
+            background: white; 
+            border: 2px solid transparent;
+            background: var(--border-gradient);
+            color: #374151; 
+            padding: 10px 18px; 
+            border-radius: 15px; 
+            font-size: 13px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            gap: 8px;
+            transition: 0.3s;
+        }
+        .action-btn.active { background: var(--primary-gradient); color: white; border: none; }
         .whatsapp-btn { background: #25D366; color: white; border: none; }
 
-        .section-header { display: flex; align-items: center; justify-content: space-between; margin-top: 25px; border-bottom: 2px solid #f3f4f6; padding-bottom: 8px; }
-        .copy-btn { background: #fdf2f8; border: 1px solid #fce7f3; color: #ec4899; padding: 6px 12px; border-radius: 10px; font-size: 11px; cursor: pointer; }
+        /* Headers & Copy buttons */
+        .section-header { 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            margin-top: 35px; 
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f3e8ff;
+        }
+        .copy-btn { 
+            background: var(--primary-gradient); 
+            color: white; 
+            border: none; 
+            padding: 6px 14px; 
+            border-radius: 10px; 
+            font-size: 11px; 
+            font-weight: 600;
+            cursor: pointer;
+        }
 
-        .calculator-box { background: #fdf2f8; padding: 15px; border-radius: 20px; margin: 20px 0; display: flex; align-items: center; justify-content: space-between; border: 1px solid #fce7f3; }
-        .calc-btn { width: 35px; height: 35px; border-radius: 50%; border: none; background: var(--primary-gradient); color: white; cursor: pointer; font-size: 20px; }
+        /* Calculator */
+        .calculator-box { 
+            background: white; 
+            padding: 18px; 
+            border-radius: 20px; 
+            margin: 25px 0; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            border: 2px solid transparent;
+            background: var(--border-gradient);
+        }
+        .calc-btn { width: 38px; height: 38px; border-radius: 50%; border: none; background: var(--primary-gradient); color: white; cursor: pointer; font-size: 22px; font-weight: bold; }
         
-        .ing-header { font-weight: bold; margin: 15px 0 5px 0; color: #8b5cf6; font-size: 15px; }
-        .ingredient-item { display: flex; align-items: center; padding: 8px 0; border-bottom: 1px solid #f9fafb; }
-        .ingredient-item input { margin-right: 12px; accent-color: #ec4899; }
+        /* Ingredients & Method */
+        .ing-header { font-weight: bold; margin: 20px 0 8px 0; color: #ec4899; font-size: 16px; letter-spacing: 0.5px; }
+        .ingredient-item { display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid #f3f4f6; }
+        .ingredient-item input { margin-right: 15px; width: 18px; height: 18px; accent-color: #8b5cf6; }
         
-        .instruction-text { line-height: 1.8; white-space: pre-wrap; color: #4b5563; font-size: 15px; }
-        .timer-link { color: #8b5cf6; font-weight: 600; text-decoration: underline; cursor: pointer; background: #f5f3ff; padding: 2px 6px; border-radius: 6px; }
+        .instruction-text { line-height: 1.9; white-space: pre-wrap; color: #4b5563; font-size: 15px; }
+        .timer-link { color: #8b5cf6; font-weight: 600; text-decoration: none; cursor: pointer; background: #f5f3ff; padding: 3px 8px; border-radius: 8px; border: 1px solid #ddd6fe; }
         
-        .edit-btn { position: absolute; top: 15px; right: 15px; background: white; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 600; box-shadow: 0 4px 10px rgba(0,0,0,0.1); cursor: pointer; color: #8b5cf6; z-index: 10; }
+        /* Edit Buttons */
+        .edit-btn { position: absolute; top: 15px; right: 15px; background: white; border: none; padding: 10px 20px; border-radius: 20px; font-weight: 600; box-shadow: 0 4px 15px rgba(0,0,0,0.1); cursor: pointer; color: #8b5cf6; z-index: 10; }
         
-        /* Hide for Print */
-        @media print { .edit-btn, .action-bar, .calculator-box, .copy-btn, .calc-btn, input[type="checkbox"], #editMode { display: none !important; } }
+        #active-timer { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #1f2937; color: white; padding: 15px 30px; border-radius: 50px; display: none; align-items: center; gap: 15px; z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+
+        @media print { .edit-btn, .action-bar, .calculator-box, .copy-btn, input[type="checkbox"] { display: none !important; } }
     </style>
 </head>
 <body>
+
+<div id="active-timer">
+    <span>⏱️ <span id="timer-display">00:00</span></span>
+    <button onclick="stopTimer()" style="background:#ef4444; border:none; color:white; padding:8px 15px; border-radius:15px; font-weight:bold; cursor:pointer;">STOP</button>
+</div>
 
 <div class="app-container">
     <button class="edit-btn" onclick="toggleEdit()">Bewerk ✏️</button>
@@ -55,51 +123,61 @@
     <div id="viewMode">
         <div id="recipeImage"></div>
         <div class="content">
-            <a href="index.html" style="text-decoration:none; color:#8b5cf6; font-weight:600;">← Terug</a>
+            <a href="index.html" style="text-decoration:none; color:#8b5cf6; font-weight:600; font-size: 14px;">← TERUG NAAR OVERZICHT</a>
             <h1 id="title">Laden...</h1>
-            <div id="scoreDisplay" class="score-display"></div>
-            <div id="chefTag" class="chef-tag"></div>
+            <span id="chefTag" class="chef-tag"></span>
 
             <div class="action-bar">
                 <button id="wakeLockBtn" class="action-btn" onclick="toggleWakeLock()">💡 Scherm aan</button>
                 <button class="action-btn" onclick="window.print()">🖨️ Printen</button>
-                <button class="action-btn whatsapp-btn" onclick="shareWhatsApp()">📱 Deel via WA</button>
+                <button class="action-btn whatsapp-btn" onclick="shareWhatsApp()">📱 WhatsApp</button>
             </div>
 
             <div class="calculator-box">
-                <b>Personen:</b>
-                <div style="display:flex; align-items:center; gap:15px;">
+                <span style="font-weight: 600; color: #8b5cf6;">PORTIES AANPASSEN</span>
+                <div style="display:flex; align-items:center; gap:20px;">
                     <button class="calc-btn" onclick="changeServings(-1)">−</button>
-                    <b id="servingsDisplay">4</b>
+                    <b id="servingsDisplay" style="font-size: 20px;">4</b>
                     <button class="calc-btn" onclick="changeServings(1)">+</button>
                 </div>
             </div>
 
             <div class="section-header">
                 <h3>Ingrediënten</h3>
-                <button class="copy-btn" onclick="copyIngredients()">📋 Kopieer</button>
+                <button class="copy-btn" onclick="copyIngredients()">📋 KOPIEER LIJST</button>
             </div>
             <div id="ingredientsList"></div>
 
             <div class="section-header">
                 <h3>Bereidingswijze</h3>
-                <button class="copy-btn" onclick="copySection('instructions')">📋 Kopieer</button>
+                <button class="copy-btn" onclick="copySection('instructions')">📋 KOPIEER STAPPEN</button>
             </div>
             <div id="instructions" class="instruction-text"></div>
         </div>
     </div>
 
     <div id="editMode" class="content" style="display:none; padding-bottom: 50px;">
-        <h2>Bewerken</h2>
-        <label style="display:block; margin-top:15px;">Titel</label><input type="text" id="editTitle" style="width:100%; padding:12px; border-radius:12px; border:2px solid #f3f4f6;">
-        <label style="display:block; margin-top:15px;">Chef</label><input type="text" id="editChef" style="width:100%; padding:12px; border-radius:12px; border:2px solid #f3f4f6;">
-        <label style="display:block; margin-top:15px;">Score (1-5 ✨)</label><input type="number" id="editScore" min="1" max="5" style="width:100%; padding:12px; border-radius:12px; border:2px solid #f3f4f6;">
-        <label style="display:block; margin-top:15px;">Basis personen</label><input type="number" id="editBase" style="width:100%; padding:12px; border-radius:12px; border:2px solid #f3f4f6;">
-        <label style="display:block; margin-top:15px;">Ingrediënten</label><textarea id="editIngredients" rows="8" style="width:100%; padding:12px; border-radius:12px; border:2px solid #f3f4f6;"></textarea>
-        <label style="display:block; margin-top:15px;">Bereiding</label><textarea id="editInstructions" rows="10" style="width:100%; padding:12px; border-radius:12px; border:2px solid #f3f4f6;"></textarea>
-        <label style="display:block; margin-top:15px;">Foto URL</label><input type="url" id="editPhoto" style="width:100%; padding:12px; border-radius:12px; border:2px solid #f3f4f6;">
-        <button onclick="saveChanges()" style="background:var(--primary-gradient); color:white; border:none; padding:15px; border-radius:25px; width:100%; font-weight:600; margin-top:20px; cursor:pointer;">Opslaan ✅</button>
-        <button onclick="toggleEdit()" style="width:100%; border:none; background:none; color:#9ca3af; margin-top:15px; cursor:pointer;">Annuleren</button>
+        <h2 style="color: #8b5cf6;">Recept Bewerken</h2>
+        <label style="display:block; margin-top:20px; font-weight:600;">Titel</label>
+        <input type="text" id="editTitle" style="width:100%; padding:14px; border-radius:15px; border:2px solid #f3e8ff;">
+        
+        <label style="display:block; margin-top:20px; font-weight:600;">Chef</label>
+        <input type="text" id="editChef" style="width:100%; padding:14px; border-radius:15px; border:2px solid #f3e8ff;">
+        
+        <label style="display:block; margin-top:20px; font-weight:600;">Aantal personen</label>
+        <input type="number" id="editBase" style="width:100%; padding:14px; border-radius:15px; border:2px solid #f3e8ff;">
+        
+        <label style="display:block; margin-top:20px; font-weight:600;">Ingrediënten</label>
+        <textarea id="editIngredients" rows="10" style="width:100%; padding:14px; border-radius:15px; border:2px solid #f3e8ff; font-family: inherit;"></textarea>
+        
+        <label style="display:block; margin-top:20px; font-weight:600;">Bereidingswijze</label>
+        <textarea id="editInstructions" rows="12" style="width:100%; padding:14px; border-radius:15px; border:2px solid #f3e8ff; font-family: inherit;"></textarea>
+        
+        <label style="display:block; margin-top:20px; font-weight:600;">Foto URL</label>
+        <input type="url" id="editPhoto" style="width:100%; padding:14px; border-radius:15px; border:2px solid #f3e8ff;">
+        
+        <button onclick="saveChanges()" style="background:var(--primary-gradient); color:white; border:none; padding:18px; border-radius:25px; width:100%; font-weight:600; margin-top:30px; cursor:pointer; font-size: 16px;">WIJZIGINGEN OPSLAAN ✅</button>
+        <button onclick="toggleEdit()" style="width:100%; border:none; background:none; color:#9ca3af; margin-top:20px; cursor:pointer;">Annuleren</button>
     </div>
 </div>
 
@@ -111,7 +189,7 @@
     const app = initializeApp(firebaseConfig); const db = getFirestore(app);
     const id = new URLSearchParams(window.location.search).get('id');
 
-    let baseS = 4, currS = 4, ingStrings = [], wakeLock = null;
+    let baseS = 4, currS = 4, ingStrings = [], wakeLock = null, timerInt = null;
 
     async function load() {
         const snap = await getDoc(doc(db, "recepten", id));
@@ -119,19 +197,20 @@
             const r = snap.data();
             baseS = parseInt(r.personen) || 4; currS = baseS;
             document.getElementById('title').innerText = r.titel;
-            document.getElementById('scoreDisplay').innerText = "✨".repeat(r.score || 5);
-            document.getElementById('chefTag').innerText = `👨‍🍳 Door ${r.chef}`;
+            document.getElementById('chefTag').innerText = `GERECHT DOOR CHEF ${r.chef.toUpperCase()}`;
             document.getElementById('servingsDisplay').innerText = currS;
             if(r.foto) document.getElementById('recipeImage').innerHTML = `<img src="${r.foto}" class="recipe-img">`;
 
-            document.getElementById('instructions').innerHTML = r.bereiding.replace(/(\d+)\s*(minuten|min)/gi, (m) => `<span class="timer-link">${m} ⏱️</span>`);
+            document.getElementById('instructions').innerHTML = r.bereiding.replace(/(\d+)\s*(minuten|min|seconden|sec)/gi, (m, p1, p2) => {
+                const s = p2.toLowerCase().includes('min') ? p1 * 60 : p1;
+                return `<span class="timer-link" onclick="window.startTimer(${s}, '${m}')">${m} ⏱️</span>`;
+            });
 
             ingStrings = r.ingredienten.split('\n').filter(s => s.trim() !== "");
             renderIngs();
 
             document.getElementById('editTitle').value = r.titel;
             document.getElementById('editChef').value = r.chef;
-            document.getElementById('editScore').value = r.score || 5;
             document.getElementById('editBase').value = baseS;
             document.getElementById('editIngredients').value = r.ingredienten;
             document.getElementById('editInstructions').value = r.bereiding;
@@ -151,36 +230,38 @@
         });
     }
 
+    window.startTimer = (s, l) => {
+        clearInterval(timerInt); document.getElementById('active-timer').style.display='flex';
+        timerInt = setInterval(() => {
+            s--; document.getElementById('timer-display').innerText = `${Math.floor(s/60)}:${(s%60).toString().padStart(2,'0')}`;
+            if(s<=0) { clearInterval(timerInt); alert("Tijd om: " + l); stopTimer(); }
+        }, 1000);
+    };
+    window.stopTimer = () => { clearInterval(timerInt); document.getElementById('active-timer').style.display='none'; };
+
     window.toggleWakeLock = async () => {
-        if (!('wakeLock' in navigator)) return alert("Browser ondersteunt geen scherm-lock.");
-        try {
-            if (!wakeLock) {
-                wakeLock = await navigator.wakeLock.request('screen');
-                document.getElementById('wakeLockBtn').classList.add('active');
-                document.getElementById('wakeLockBtn').innerText = "💡 Scherm blijft aan";
-            } else {
-                await wakeLock.release(); wakeLock = null;
-                document.getElementById('wakeLockBtn').classList.remove('active');
-                document.getElementById('wakeLockBtn').innerText = "💡 Scherm aan";
-            }
-        } catch (err) { console.error(err); }
+        if (!('wakeLock' in navigator)) return;
+        if (!wakeLock) {
+            wakeLock = await navigator.wakeLock.request('screen');
+            document.getElementById('wakeLockBtn').classList.add('active');
+        } else {
+            await wakeLock.release(); wakeLock = null;
+            document.getElementById('wakeLockBtn').classList.remove('active');
+        }
     };
 
     window.shareWhatsApp = () => {
-        const title = document.getElementById('title').innerText;
-        const url = window.location.href;
-        window.open(`https://api.whatsapp.com/send?text=Check dit recept: ${title} - ${url}`);
+        window.open(`https://api.whatsapp.com/send?text=Check dit recept op Loemek Kitchen: ${document.getElementById('title').innerText} - ${window.location.href}`);
     };
 
     window.copyIngredients = () => {
-        let text = "";
-        document.querySelectorAll('#ingredientsList div').forEach(el => text += el.innerText + "\n");
-        navigator.clipboard.writeText(text.trim()).then(() => alert("Ingrediënten gekopieerd!"));
+        let text = ""; document.querySelectorAll('#ingredientsList div').forEach(el => text += el.innerText + "\n");
+        navigator.clipboard.writeText(text.trim()).then(() => alert("Boodschappenlijst gekopieerd!"));
     };
 
     window.copySection = (id) => {
-        let text = document.getElementById(id).innerText;
-        navigator.clipboard.writeText(text).then(() => alert("Bereiding gekopieerd!"));
+        let text = document.getElementById(id).innerText.replace(/⏱️/g, "");
+        navigator.clipboard.writeText(text).then(() => alert("Bereidingswijze gekopieerd!"));
     };
 
     window.changeServings = (v) => { if(currS+v > 0) { currS+=v; document.getElementById('servingsDisplay').innerText=currS; renderIngs(); } };
@@ -195,7 +276,6 @@
         await updateDoc(doc(db, "recepten", id), {
             titel: document.getElementById('editTitle').value,
             chef: document.getElementById('editChef').value,
-            score: document.getElementById('editScore').value,
             personen: document.getElementById('editBase').value,
             ingredienten: document.getElementById('editIngredients').value,
             bereiding: document.getElementById('editInstructions').value,
