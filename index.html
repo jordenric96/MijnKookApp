@@ -6,198 +6,65 @@
     <title>Loemek Kitchen</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        /* CSS Reset & Mobiele Fix */
         * { box-sizing: border-box; }
-        
-        :root {
-            --primary-gradient: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
-            --soft-bg: linear-gradient(135deg, #fce7f3 0%, #f5f3ff 100%);
-        }
-
-        body { 
-            font-family: 'Poppins', sans-serif; 
-            background: var(--soft-bg) no-repeat fixed; 
-            margin: 0; 
-            padding: 0; 
-            color: #374151; 
-            overflow-x: hidden; 
-        }
-
-        /* Header met Roze/Paarse accenten */
-        .header { 
-            padding: 35px 20px; 
-            text-align: center; 
-            background: white; 
-            border-radius: 0 0 35px 35px; 
-            box-shadow: 0 10px 25px rgba(236, 72, 153, 0.1); 
-        }
-        h1 { 
-            font-family: 'Playfair Display', serif; 
-            font-size: 34px; 
-            margin: 0; 
-            background: var(--primary-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .subtitle { font-size: 14px; color: #8b5cf6; font-weight: 400; margin-top: 5px; }
-
-        /* Zoekbalk binnen het scherm */
+        :root { --primary-gradient: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%); --soft-bg: linear-gradient(135deg, #fce7f3 0%, #f5f3ff 100%); }
+        body { font-family: 'Poppins', sans-serif; background: var(--soft-bg) no-repeat fixed; margin: 0; padding: 0; color: #374151; overflow-x: hidden; }
+        .header { padding: 35px 20px; text-align: center; background: white; border-radius: 0 0 35px 35px; box-shadow: 0 10px 25px rgba(236, 72, 153, 0.1); }
+        h1 { font-family: 'Playfair Display', serif; font-size: 34px; margin: 0; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .search-container { padding: 15px; width: 100%; }
-        #searchInput { 
-            width: 100%; 
-            padding: 14px 20px; 
-            border: 2px solid #fce7f3; 
-            border-radius: 18px; 
-            font-family: inherit; 
-            font-size: 16px; 
-            outline: none;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
-            transition: 0.3s;
-        }
-        #searchInput:focus { border-color: #ec4899; background: white; }
-
-        /* Filter Grid (Geen scroll, paars als actief) */
-        .filter-container { 
-            display: grid; 
-            grid-template-columns: repeat(3, 1fr); 
-            gap: 8px; 
-            padding: 0 15px 15px 15px; 
-        }
-        .filter-btn { 
-            padding: 10px 2px; 
-            border-radius: 12px; 
-            border: 1px solid #f3e8ff; 
-            background: white; 
-            font-size: 12px; 
-            font-weight: 600; 
-            color: #8b5cf6; 
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .filter-btn.active { 
-            background: var(--primary-gradient); 
-            color: white; 
-            border: none;
-            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
-        }
-
-        /* Recepten Grid (2 kolommen op mobiel) */
-        .recipe-grid { 
-            display: grid; 
-            grid-template-columns: repeat(2, 1fr); 
-            gap: 12px; 
-            padding: 15px; 
-        }
-        @media (min-width: 600px) { .recipe-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); } }
-
-        .recipe-card { 
-            background: white; 
-            border-radius: 20px; 
-            overflow: hidden; 
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05); 
-            text-decoration: none; 
-            color: inherit;
-            display: flex;
-            flex-direction: column;
-        }
+        #searchInput { width: 100%; padding: 14px 20px; border: 2px solid #fce7f3; border-radius: 18px; outline: none; transition: 0.3s; }
+        .filter-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 0 15px 15px 15px; }
+        .filter-btn { padding: 10px 2px; border-radius: 12px; border: 1px solid #f3e8ff; background: white; font-size: 11px; font-weight: 600; color: #8b5cf6; cursor: pointer; }
+        .filter-btn.active { background: var(--primary-gradient); color: white; border: none; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3); }
+        .recipe-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 15px; }
+        .recipe-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); text-decoration: none; color: inherit; }
         .recipe-card img { width: 100%; height: 135px; object-fit: cover; }
-        .recipe-info { padding: 12px; flex-grow: 1; }
+        .recipe-info { padding: 12px; }
         .recipe-title { font-weight: 600; font-size: 14px; color: #1f2937; margin-bottom: 4px; }
         .recipe-meta { font-size: 11px; color: #ec4899; font-weight: 500; }
-
-        /* Floating Add Button */
-        .add-btn { 
-            position: fixed; 
-            bottom: 25px; 
-            right: 25px; 
-            width: 60px; 
-            height: 60px; 
-            background: var(--primary-gradient); 
-            color: white; 
-            border-radius: 50%; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            font-size: 32px; 
-            box-shadow: 0 8px 20px rgba(139, 92, 246, 0.4); 
-            text-decoration: none; 
-            z-index: 1000; 
-        }
+        .add-btn { position: fixed; bottom: 25px; right: 25px; width: 60px; height: 60px; background: var(--primary-gradient); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; box-shadow: 0 8px 20px rgba(139, 92, 246, 0.4); text-decoration: none; z-index: 1000; }
     </style>
 </head>
 <body>
+    <div class="header"><h1>Loemek Kitchen</h1><p style="color:#8b5cf6; margin:5px 0 0 0;">Mijn Kookboek ✨</p></div>
+    <div class="search-container"><input type="text" id="searchInput" placeholder="Zoek recept of chef..." onkeyup="searchRecipes()"></div>
+    <div class="filter-container">
+        <button class="filter-btn active" onclick="filterRecipes('Alles', this)">Alles</button>
+        <button class="filter-btn" onclick="filterRecipes('Hapjes', this)">Hapjes</button>
+        <button class="filter-btn" onclick="filterRecipes('Voorgerecht', this)">Voor</button>
+        <button class="filter-btn" onclick="filterRecipes('Hoofdgerecht', this)">Hoofd</button>
+        <button class="filter-btn" onclick="filterRecipes('Bijgerecht', this)">Bijgerecht</button>
+        <button class="filter-btn" onclick="filterRecipes('Dessert', this)">Dessert</button>
+        <button class="filter-btn" onclick="filterRecipes('Patisserie', this)">Patisserie</button>
+        <button class="filter-btn" onclick="filterRecipes('Sauzen', this)">Sauzen</button>
+        <button class="filter-btn" onclick="filterRecipes('Snack', this)">Snack</button>
+    </div>
+    <div class="recipe-grid" id="recipeList"></div>
+    <a href="toevoegen.html" class="add-btn">+</a>
 
-<div class="header">
-    <h1>Loemek Kitchen</h1>
-    <p class="subtitle">Wat eten we vandaag? ✨</p>
-</div>
-
-<div class="search-container">
-    <input type="text" id="searchInput" placeholder="Zoek een recept..." onkeyup="searchRecipes()">
-</div>
-
-<div class="filter-container">
-    <button class="filter-btn active" onclick="filterRecipes('Alles', this)">Alles</button>
-    <button class="filter-btn" onclick="filterRecipes('Hapjes', this)">Hapjes</button>
-    <button class="filter-btn" onclick="filterRecipes('Voorgerecht', this)">Voor</button>
-    <button class="filter-btn" onclick="filterRecipes('Hoofdgerecht', this)">Hoofd</button>
-    <button class="filter-btn" onclick="filterRecipes('Bijgerecht', this)">Bijgerecht</button>
-    <button class="filter-btn" onclick="filterRecipes('Dessert', this)">Dessert</button>
-    <button class="filter-btn" onclick="filterRecipes('Patisserie', this)">Bakkerij</button>
-    <button class="filter-btn" onclick="filterRecipes('Sauzen', this)">Sauzen</button>
-    <button class="filter-btn" onclick="filterRecipes('Snack', this)">Snack</button>
-</div>
-
-<div class="recipe-grid" id="recipeList"></div>
-
-<a href="toevoegen.html" class="add-btn">+</a>
-
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-    const firebaseConfig = { apiKey: "AIzaSyBzsxSTQKhhh8yKb4AFew7zQz26BMNKfHw", authDomain: "mijnkookapp2.firebaseapp.com", projectId: "mijnkookapp2", storageBucket: "mijnkookapp2.firebasestorage.app", messagingSenderId: "77365526386", appId: "1:77365526386:web:faa6d99632dae10b4d67eb" };
-    const app = initializeApp(firebaseConfig); const db = getFirestore(app);
-    let allRecipes = [];
-    let currentFilter = 'Alles';
-
-    async function getRecipes() {
-        const snap = await getDocs(collection(db, "recepten"));
-        allRecipes = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        render(allRecipes);
-    }
-
-    function render(list) {
-        const container = document.getElementById('recipeList');
-        container.innerHTML = list.map(r => `
-            <a href="recept.html?id=${r.id}" class="recipe-card">
-                <img src="${r.foto || 'https://via.placeholder.com/300x200?text=Loemek+Kitchen'}" alt="${r.titel}">
-                <div class="recipe-info">
-                    <div class="recipe-title">${r.titel}</div>
-                    <div class="recipe-meta">👨‍🍳 ${r.chef}</div>
-                </div>
-            </a>
-        `).join('');
-    }
-
-    window.searchRecipes = () => {
-        const query = document.getElementById('searchInput').value.toLowerCase();
-        const filtered = allRecipes.filter(r => {
-            const matchesSearch = r.titel.toLowerCase().includes(query) || r.chef.toLowerCase().includes(query);
-            const matchesType = currentFilter === 'Alles' || (r.types && r.types.includes(currentFilter));
-            return matchesSearch && matchesType;
-        });
-        render(filtered);
-    };
-
-    window.filterRecipes = (type, btn) => {
-        currentFilter = type;
-        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        window.searchRecipes();
-    };
-
-    getRecipes();
-</script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        const firebaseConfig = { apiKey: "AIzaSyBzsxSTQKhhh8yKb4AFew7zQz26BMNKfHw", authDomain: "mijnkookapp2.firebaseapp.com", projectId: "mijnkookapp2", storageBucket: "mijnkookapp2.firebasestorage.app", messagingSenderId: "77365526386", appId: "1:77365526386:web:faa6d99632dae10b4d67eb" };
+        const app = initializeApp(firebaseConfig); const db = getFirestore(app);
+        let allRecipes = []; let currentFilter = 'Alles';
+        async function getRecipes() { const snap = await getDocs(collection(db, "recepten")); allRecipes = snap.docs.map(doc => ({ id: doc.id, ...doc.data() })); render(allRecipes); }
+        function render(list) {
+            document.getElementById('recipeList').innerHTML = list.map(r => `
+                <a href="recept.html?id=${r.id}" class="recipe-card">
+                    <img src="${r.foto || 'https://via.placeholder.com/300x200?text=Loemek+Kitchen'}" alt="${r.titel}">
+                    <div class="recipe-info"><div class="recipe-title">${r.titel}</div><div class="recipe-meta">👨‍🍳 ${r.chef}</div></div>
+                </a>`).join('');
+        }
+        window.searchRecipes = () => {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            render(allRecipes.filter(r => (r.titel.toLowerCase().includes(query) || r.chef.toLowerCase().includes(query)) && (currentFilter === 'Alles' || (r.types && r.types.includes(currentFilter)))));
+        };
+        window.filterRecipes = (type, btn) => {
+            currentFilter = type; document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active'); window.searchRecipes();
+        };
+        getRecipes();
+    </script>
 </body>
 </html>
