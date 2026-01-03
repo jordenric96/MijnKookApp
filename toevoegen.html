@@ -10,15 +10,14 @@
         .form-container { max-width: 600px; margin: 0 auto; background: white; padding: 30px; border-radius: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
         h2 { color: #8b5cf6; text-align: center; margin-bottom: 25px; }
         label { font-weight: 600; display: block; margin-top: 15px; color: #4b5563; }
-        input, textarea { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #e5e7eb; border-radius: 12px; box-sizing: border-box; font-family: inherit; }
+        input, textarea { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #e5e7eb; border-radius: 12px; box-sizing: border-box; font-family: inherit; font-size: 14px; }
         
-        /* Thema Grid */
         .theme-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; background: #f9fafb; padding: 15px; border-radius: 15px; border: 1px solid #eee; }
-        .theme-item { display: flex; align-items: center; gap: 10px; font-size: 14px; cursor: pointer; margin: 0; }
+        .theme-item { display: flex; align-items: center; gap: 10px; font-size: 14px; cursor: pointer; }
         .theme-item input { width: auto; margin: 0; accent-color: #8b5cf6; }
 
         .btn-submit { background: linear-gradient(135deg, #ec4899, #8b5cf6); color: white; border: none; padding: 16px; border-radius: 25px; width: 100%; font-weight: 600; margin-top: 30px; cursor: pointer; font-size: 16px; transition: 0.3s; }
-        .btn-submit:hover { opacity: 0.9; transform: translateY(-2px); }
+        .btn-submit:active { transform: scale(0.98); }
     </style>
 </head>
 <body>
@@ -27,12 +26,12 @@
     <h2>Nieuw Recept ✍️</h2>
     <form id="recipeForm">
         <label>Titel van het gerecht</label>
-        <input type="text" id="titel" placeholder="Bijv. Chocoladecake" required>
+        <input type="text" id="titel" placeholder="Bijv. Bresiliennetaart" required>
 
         <label>Wie is de Chef?</label>
         <input type="text" id="chef" placeholder="Jouw naam" required>
 
-        <label>Selecteer Thema's (meerdere mogelijk)</label>
+        <label>Thema's (selecteer meerdere mogelijk)</label>
         <div class="theme-grid" id="themeGrid">
             <label class="theme-item"><input type="checkbox" value="Hapjes"> Hapjes</label>
             <label class="theme-item"><input type="checkbox" value="Voorgerecht"> Voorgerecht</label>
@@ -45,19 +44,19 @@
         </div>
 
         <label>Aantal personen (basis)</label>
-        <input type="number" id="personen" value="4" min="1">
+        <input type="number" id="personen" value="4">
 
-        <label>Ingrediënten (scheid met een komma)</label>
-        <textarea id="ingredienten" rows="4" placeholder="250g bloem, 2 eieren..." required></textarea>
+        <label>Ingrediënten (per lijn, titels tussen haakjes)</label>
+        <textarea id="ingredienten" rows="6" placeholder="(Deeg)&#10;1 rol kruimeldeeg&#10;(Vulling)&#10;500ml melk" required></textarea>
 
-        <label>Bereidingswijze (gebruik 'minuten' voor timers)</label>
-        <textarea id="bereiding" rows="6" placeholder="Bak de cake 45 minuten..." required></textarea>
+        <label>Bereidingswijze (gebruik getallen + min/minuten voor timers)</label>
+        <textarea id="bereiding" rows="8" placeholder="Bak 20 minuten op 200 graden..." required></textarea>
 
         <label>Foto URL</label>
-        <input type="url" id="foto" placeholder="Link naar een afbeelding">
+        <input type="url" id="foto" placeholder="https://link-naar-foto.jpg">
 
-        <button type="submit" class="btn-submit">Recept Toevoegen 🚀</button>
-        <a href="index.html" style="display:block; text-align:center; margin-top:20px; color:#9ca3af; text-decoration:none; font-size:14px;">Annuleren</a>
+        <button type="submit" class="btn-submit">Recept Delen 🚀</button>
+        <a href="index.html" style="display:block; text-align:center; margin-top:15px; color:#9ca3af; text-decoration:none; font-size:14px;">Terug naar overzicht</a>
     </form>
 </div>
 
@@ -80,22 +79,24 @@
     document.getElementById('recipeForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         
-        const selectedThemes = [];
-        document.querySelectorAll('#themeGrid input:checked').forEach(cb => selectedThemes.push(cb.value));
+        // Haal geselecteerde thema's op
+        const geselecteerdeThemas = [];
+        document.querySelectorAll('#themeGrid input:checked').forEach(cb => geselecteerdeThemas.push(cb.value));
 
-        if (selectedThemes.length === 0) {
-            alert("Selecteer ten minste één thema!");
+        if (geselecteerdeThemas.length === 0) {
+            alert("Kies aub minstens één thema.");
             return;
         }
 
-        const newRecipe = {
-            titel: document.getElementById('titel').value,
-            chef: document.getElementById('chef').value,
-            types: selectedThemes,
+        const nieuwRecept = {
+            titel: document.getElementById('titel').value.trim(),
+            chef: document.getElementById('chef').value.trim(),
+            types: geselecteerdeThemas,
             personen: document.getElementById('personen').value,
-            ingredienten: document.getElementById('ingredienten').value,
-            bereiding: document.getElementById('bereiding').value,
-            foto: document.getElementById('foto').value,
+            // We zorgen dat witruimte en nieuwe regels behouden blijven
+            ingredienten: document.getElementById('ingredienten').value.trim(),
+            bereiding: document.getElementById('bereiding').value.trim(),
+            foto: document.getElementById('foto').value.trim(),
             datum: new Date(),
             gemiddeldeScore: 0,
             totaalScores: 0,
@@ -103,10 +104,12 @@
         };
 
         try {
-            await addDoc(collection(db, "recepten"), newRecipe);
+            await addDoc(collection(db, "recepten"), nieuwRecept);
+            alert("Recept succesvol toegevoegd! ✨");
             window.location.href = "index.html";
         } catch (error) {
-            alert("Fout bij opslaan: " + error.message);
+            console.error("Fout:", error);
+            alert("Er ging iets mis bij het opslaan.");
         }
     });
 </script>
