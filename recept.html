@@ -14,97 +14,30 @@
             --danger-gradient: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
         }
         body { font-family: 'Poppins', sans-serif; background: var(--soft-bg) no-repeat fixed; margin: 0; padding: 0; color: #374151; min-height: 100vh; }
-        
-        .app-container { 
-            max-width: 850px; 
-            margin: 0 auto; 
-            background: rgba(255, 255, 255, 0.98); 
-            min-height: 100vh; 
-            position: relative; 
-            border-left: 4px solid #ec4899;
-        }
-        
-        @media (min-width: 600px) { 
-            .app-container { 
-                margin: 20px auto; 
-                border-radius: 30px; 
-                border: 4px solid transparent;
-                background: var(--border-gradient);
-                min-height: auto;
-                box-shadow: 0 15px 35px rgba(139, 92, 246, 0.2);
-            } 
-        }
-        
+        .app-container { max-width: 850px; margin: 0 auto; background: rgba(255, 255, 255, 0.98); min-height: 100vh; position: relative; border-left: 4px solid #ec4899; }
+        @media (min-width: 600px) { .app-container { margin: 20px auto; border-radius: 30px; border: 4px solid transparent; background: var(--border-gradient); min-height: auto; box-shadow: 0 15px 35px rgba(139, 92, 246, 0.2); } }
         .recipe-img { width: 100%; height: 350px; object-fit: cover; }
         .content { padding: 25px; }
-        
         h1 { font-family: 'Playfair Display', serif; font-size: 34px; margin: 10px 0 20px 0; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .chef-tag { color: #8b5cf6; font-weight: 600; font-size: 15px; margin-bottom: 25px; display: block; }
-        
         .action-bar { display: flex; gap: 12px; margin-bottom: 25px; flex-wrap: wrap; }
-        .action-btn { 
-            background: white; 
-            border: 2px solid transparent;
-            background: var(--border-gradient);
-            color: #374151; 
-            padding: 10px 18px; 
-            border-radius: 15px; 
-            font-size: 13px; 
-            font-weight: 600; 
-            cursor: pointer; 
-            display: flex; 
-            align-items: center; 
-            gap: 8px;
-            transition: 0.3s;
-        }
+        .action-btn { background: white; border: 2px solid transparent; background: var(--border-gradient); color: #374151; padding: 10px 18px; border-radius: 15px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
         .action-btn.active { background: var(--primary-gradient); color: white; border: none; }
         .whatsapp-btn { background: #25D366; color: white; border: none; }
-
-        .section-header { 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between; 
-            margin-top: 35px; 
-            padding-bottom: 10px;
-            border-bottom: 2px solid #f3e8ff;
-        }
-        .copy-btn { 
-            background: var(--primary-gradient); 
-            color: white; 
-            border: none; 
-            padding: 6px 14px; 
-            border-radius: 10px; 
-            font-size: 11px; 
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .calculator-box { 
-            background: white; 
-            padding: 18px; 
-            border-radius: 20px; 
-            margin: 25px 0; 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between; 
-            border: 2px solid transparent;
-            background: var(--border-gradient);
-        }
+        .section-header { display: flex; align-items: center; justify-content: space-between; margin-top: 35px; padding-bottom: 10px; border-bottom: 2px solid #f3e8ff; }
+        .copy-btn { background: var(--primary-gradient); color: white; border: none; padding: 6px 14px; border-radius: 10px; font-size: 11px; font-weight: 600; cursor: pointer; }
+        .calculator-box { background: white; padding: 18px; border-radius: 20px; margin: 25px 0; display: flex; align-items: center; justify-content: space-between; border: 2px solid transparent; background: var(--border-gradient); }
         .calc-btn { width: 38px; height: 38px; border-radius: 50%; border: none; background: var(--primary-gradient); color: white; cursor: pointer; font-size: 22px; font-weight: bold; }
-        
         .ing-header { font-weight: bold; margin: 20px 0 8px 0; color: #ec4899; font-size: 16px; letter-spacing: 0.5px; }
         .ingredient-item { display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid #f3f4f6; }
         .ingredient-item input { margin-right: 15px; width: 18px; height: 18px; accent-color: #8b5cf6; }
-        
         .instruction-text { line-height: 1.9; white-space: pre-wrap; color: #4b5563; font-size: 15px; }
         .timer-link { color: #8b5cf6; font-weight: 600; text-decoration: none; cursor: pointer; background: #f5f3ff; padding: 3px 8px; border-radius: 8px; border: 1px solid #ddd6fe; }
-        
         .edit-btn { position: absolute; top: 15px; right: 15px; background: white; border: none; padding: 10px 20px; border-radius: 20px; font-weight: 600; box-shadow: 0 4px 15px rgba(0,0,0,0.1); cursor: pointer; color: #8b5cf6; z-index: 10; }
-        
         .btn-delete { background: var(--danger-gradient); color: white; border: none; padding: 15px; border-radius: 25px; width: 100%; font-weight: 600; margin-top: 40px; cursor: pointer; font-size: 14px; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3); }
-
         #active-timer { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #1f2937; color: white; padding: 15px 30px; border-radius: 50px; display: none; align-items: center; gap: 15px; z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-
+        .theme-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 10px 0; background: #f9fafb; padding: 15px; border-radius: 15px; border: 1px solid #f3e8ff; }
+        .theme-item { display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer; }
         @media print { .edit-btn, .action-bar, .calculator-box, .copy-btn, input[type="checkbox"] { display: none !important; } }
     </style>
 </head>
@@ -124,13 +57,11 @@
             <a href="index.html" style="text-decoration:none; color:#8b5cf6; font-weight:600; font-size: 14px;">← TERUG NAAR OVERZICHT</a>
             <h1 id="title">Laden...</h1>
             <span id="chefTag" class="chef-tag"></span>
-
             <div class="action-bar">
                 <button id="wakeLockBtn" class="action-btn" onclick="toggleWakeLock()">💡 Scherm aan</button>
                 <button class="action-btn" onclick="window.print()">🖨️ Printen</button>
                 <button class="action-btn whatsapp-btn" onclick="shareWhatsApp()">📱 WhatsApp</button>
             </div>
-
             <div class="calculator-box">
                 <span style="font-weight: 600; color: #8b5cf6;">PORTIES AANPASSEN</span>
                 <div style="display:flex; align-items:center; gap:20px;">
@@ -139,17 +70,9 @@
                     <button class="calc-btn" onclick="changeServings(1)">+</button>
                 </div>
             </div>
-
-            <div class="section-header">
-                <h3>Ingrediënten</h3>
-                <button class="copy-btn" onclick="copyIngredients()">📋 KOPIEER LIJST</button>
-            </div>
+            <div class="section-header"><h3>Ingrediënten</h3><button class="copy-btn" onclick="copyIngredients()">📋 KOPIEER LIJST</button></div>
             <div id="ingredientsList"></div>
-
-            <div class="section-header">
-                <h3>Bereidingswijze</h3>
-                <button class="copy-btn" onclick="copySection('instructions')">📋 KOPIEER STAPPEN</button>
-            </div>
+            <div class="section-header"><h3>Bereidingswijze</h3><button class="copy-btn" onclick="copySection('instructions')">📋 KOPIEER STAPPEN</button></div>
             <div id="instructions" class="instruction-text"></div>
         </div>
     </div>
@@ -162,6 +85,18 @@
         <label style="display:block; margin-top:20px; font-weight:600;">Chef</label>
         <input type="text" id="editChef" style="width:100%; padding:14px; border-radius:15px; border:2px solid #f3e8ff;">
         
+        <label style="display:block; margin-top:20px; font-weight:600;">Type Gerecht</label>
+        <div class="theme-grid" id="editThemeGrid">
+            <label class="theme-item"><input type="checkbox" value="Hapjes"> Hapjes</label>
+            <label class="theme-item"><input type="checkbox" value="Voorgerecht"> Voorgerecht</label>
+            <label class="theme-item"><input type="checkbox" value="Hoofdgerecht"> Hoofdgerecht</label>
+            <label class="theme-item"><input type="checkbox" value="Bijgerecht"> Bijgerecht</label>
+            <label class="theme-item"><input type="checkbox" value="Dessert"> Dessert</label>
+            <label class="theme-item"><input type="checkbox" value="Patisserie"> Patisserie</label>
+            <label class="theme-item"><input type="checkbox" value="Sauzen"> Sauzen</label>
+            <label class="theme-item"><input type="checkbox" value="Snack"> Snack</label>
+        </div>
+
         <label style="display:block; margin-top:20px; font-weight:600;">Aantal personen</label>
         <input type="number" id="editBase" style="width:100%; padding:14px; border-radius:15px; border:2px solid #f3e8ff;">
         
@@ -175,9 +110,7 @@
         <input type="url" id="editPhoto" style="width:100%; padding:14px; border-radius:15px; border:2px solid #f3e8ff;">
         
         <button onclick="saveChanges()" style="background:var(--primary-gradient); color:white; border:none; padding:18px; border-radius:25px; width:100%; font-weight:600; margin-top:30px; cursor:pointer; font-size: 16px;">WIJZIGINGEN OPSLAAN ✅</button>
-        
         <button onclick="deleteRecipe()" class="btn-delete">RECEPT DEFINITIEF VERWIJDEREN 🗑️</button>
-        
         <button onclick="toggleEdit()" style="width:100%; border:none; background:none; color:#9ca3af; margin-top:20px; cursor:pointer;">Annuleren</button>
     </div>
 </div>
@@ -201,21 +134,25 @@
             document.getElementById('chefTag').innerText = `GERECHT DOOR CHEF ${r.chef.toUpperCase()}`;
             document.getElementById('servingsDisplay').innerText = currS;
             if(r.foto) document.getElementById('recipeImage').innerHTML = `<img src="${r.foto}" class="recipe-img">`;
-
             document.getElementById('instructions').innerHTML = r.bereiding.replace(/(\d+)\s*(minuten|min|seconden|sec)/gi, (m, p1, p2) => {
                 const s = p2.toLowerCase().includes('min') ? p1 * 60 : p1;
                 return `<span class="timer-link" onclick="window.startTimer(${s}, '${m}')">${m} ⏱️</span>`;
             });
-
             ingStrings = r.ingredienten.split('\n').filter(s => s.trim() !== "");
             renderIngs();
 
+            // Vul Edit Velden
             document.getElementById('editTitle').value = r.titel;
             document.getElementById('editChef').value = r.chef;
             document.getElementById('editBase').value = baseS;
             document.getElementById('editIngredients').value = r.ingredienten;
             document.getElementById('editInstructions').value = r.bereiding;
             document.getElementById('editPhoto').value = r.foto || "";
+            if(r.types) {
+                document.querySelectorAll('#editThemeGrid input').forEach(cb => {
+                    cb.checked = r.types.includes(cb.value);
+                });
+            }
         }
     }
 
@@ -231,53 +168,14 @@
         });
     }
 
-    window.startTimer = (s, l) => {
-        clearInterval(timerInt); document.getElementById('active-timer').style.display='flex';
-        timerInt = setInterval(() => {
-            s--; document.getElementById('timer-display').innerText = `${Math.floor(s/60)}:${(s%60).toString().padStart(2,'0')}`;
-            if(s<=0) { clearInterval(timerInt); alert("Tijd om: " + l); stopTimer(); }
-        }, 1000);
-    };
-    window.stopTimer = () => { clearInterval(timerInt); document.getElementById('active-timer').style.display='none'; };
-
-    window.toggleWakeLock = async () => {
-        if (!('wakeLock' in navigator)) return;
-        if (!wakeLock) {
-            wakeLock = await navigator.wakeLock.request('screen');
-            document.getElementById('wakeLockBtn').classList.add('active');
-        } else {
-            await wakeLock.release(); wakeLock = null;
-            document.getElementById('wakeLockBtn').classList.remove('active');
-        }
-    };
-
-    window.shareWhatsApp = () => {
-        window.open(`https://api.whatsapp.com/send?text=Check dit recept op Loemek Kitchen: ${document.getElementById('title').innerText} - ${window.location.href}`);
-    };
-
-    window.copyIngredients = () => {
-        let text = ""; document.querySelectorAll('#ingredientsList div').forEach(el => text += el.innerText + "\n");
-        navigator.clipboard.writeText(text.trim()).then(() => alert("Boodschappenlijst gekopieerd!"));
-    };
-
-    window.copySection = (id) => {
-        let text = document.getElementById(id).innerText.replace(/⏱️/g, "");
-        navigator.clipboard.writeText(text).then(() => alert("Bereidingswijze gekopieerd!"));
-    };
-
-    window.changeServings = (v) => { if(currS+v > 0) { currS+=v; document.getElementById('servingsDisplay').innerText=currS; renderIngs(); } };
-    
-    window.toggleEdit = () => {
-        const v = document.getElementById('viewMode'), e = document.getElementById('editMode');
-        v.style.display = v.style.display === "none" ? "block" : "none";
-        e.style.display = e.style.display === "none" ? "block" : "none";
-        window.scrollTo(0,0);
-    };
-
     window.saveChanges = async () => {
+        const types = [];
+        document.querySelectorAll('#editThemeGrid input:checked').forEach(cb => types.push(cb.value));
+        
         await updateDoc(doc(db, "recepten", id), {
             titel: document.getElementById('editTitle').value,
             chef: document.getElementById('editChef').value,
+            types: types,
             personen: document.getElementById('editBase').value,
             ingredienten: document.getElementById('editIngredients').value,
             bereiding: document.getElementById('editInstructions').value,
@@ -287,16 +185,20 @@
     };
 
     window.deleteRecipe = async () => {
-        const pw = prompt("Voer het wachtwoord in om te verwijderen:");
+        const pw = prompt("Wachtwoord:");
         if (pw === "RSCA1908") {
-            if(confirm("Weet je zeker dat je dit recept wilt verwijderen?")) {
-                await deleteDoc(doc(db, "recepten", id));
-                window.location.href = "index.html";
-            }
-        } else if (pw !== null) {
-            alert("Fout wachtwoord!");
-        }
+            if(confirm("Zeker weten?")) { await deleteDoc(doc(db, "recepten", id)); window.location.href = "index.html"; }
+        } else if (pw !== null) { alert("Fout!"); }
     };
+
+    window.startTimer = (s, l) => { clearInterval(timerInt); document.getElementById('active-timer').style.display='flex'; timerInt = setInterval(() => { s--; document.getElementById('timer-display').innerText = `${Math.floor(s/60)}:${(s%60).toString().padStart(2,'0')}`; if(s<=0) { clearInterval(timerInt); alert("Tijd om: " + l); stopTimer(); } }, 1000); };
+    window.stopTimer = () => { clearInterval(timerInt); document.getElementById('active-timer').style.display='none'; };
+    window.toggleWakeLock = async () => { if (!('wakeLock' in navigator)) return; if (!wakeLock) { wakeLock = await navigator.wakeLock.request('screen'); document.getElementById('wakeLockBtn').classList.add('active'); } else { await wakeLock.release(); wakeLock = null; document.getElementById('wakeLockBtn').classList.remove('active'); } };
+    window.shareWhatsApp = () => { window.open(`https://api.whatsapp.com/send?text=Check dit recept: ${document.getElementById('title').innerText} - ${window.location.href}`); };
+    window.copyIngredients = () => { let text = ""; document.querySelectorAll('#ingredientsList div').forEach(el => text += el.innerText + "\n"); navigator.clipboard.writeText(text.trim()).then(() => alert("Gekopieerd!")); };
+    window.copySection = (id) => { let text = document.getElementById(id).innerText.replace(/⏱️/g, ""); navigator.clipboard.writeText(text).then(() => alert("Gekopieerd!")); };
+    window.changeServings = (v) => { if(currS+v > 0) { currS+=v; document.getElementById('servingsDisplay').innerText=currS; renderIngs(); } };
+    window.toggleEdit = () => { const v = document.getElementById('viewMode'), e = document.getElementById('editMode'); v.style.display = v.style.display === "none" ? "block" : "none"; e.style.display = e.style.display === "none" ? "block" : "none"; window.scrollTo(0,0); };
 
     load();
 </script>
