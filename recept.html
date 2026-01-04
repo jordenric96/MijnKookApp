@@ -11,6 +11,7 @@
             --primary-gradient: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
             --soft-bg: linear-gradient(135deg, #fce7f3 0%, #f5f3ff 100%);
             --border-gradient: linear-gradient(white, white) padding-box, var(--primary-gradient) border-box;
+            --danger-gradient: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
         }
         body { font-family: 'Poppins', sans-serif; background: var(--soft-bg) no-repeat fixed; margin: 0; padding: 0; color: #374151; min-height: 100vh; }
         
@@ -20,7 +21,7 @@
             background: rgba(255, 255, 255, 0.98); 
             min-height: 100vh; 
             position: relative; 
-            border-left: 4px solid #ec4899; /* Accent rand aan de zijkant */
+            border-left: 4px solid #ec4899;
         }
         
         @media (min-width: 600px) { 
@@ -40,7 +41,6 @@
         h1 { font-family: 'Playfair Display', serif; font-size: 34px; margin: 10px 0 20px 0; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .chef-tag { color: #8b5cf6; font-weight: 600; font-size: 15px; margin-bottom: 25px; display: block; }
         
-        /* Action Buttons */
         .action-bar { display: flex; gap: 12px; margin-bottom: 25px; flex-wrap: wrap; }
         .action-btn { 
             background: white; 
@@ -60,7 +60,6 @@
         .action-btn.active { background: var(--primary-gradient); color: white; border: none; }
         .whatsapp-btn { background: #25D366; color: white; border: none; }
 
-        /* Headers & Copy buttons */
         .section-header { 
             display: flex; 
             align-items: center; 
@@ -80,7 +79,6 @@
             cursor: pointer;
         }
 
-        /* Calculator */
         .calculator-box { 
             background: white; 
             padding: 18px; 
@@ -94,7 +92,6 @@
         }
         .calc-btn { width: 38px; height: 38px; border-radius: 50%; border: none; background: var(--primary-gradient); color: white; cursor: pointer; font-size: 22px; font-weight: bold; }
         
-        /* Ingredients & Method */
         .ing-header { font-weight: bold; margin: 20px 0 8px 0; color: #ec4899; font-size: 16px; letter-spacing: 0.5px; }
         .ingredient-item { display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid #f3f4f6; }
         .ingredient-item input { margin-right: 15px; width: 18px; height: 18px; accent-color: #8b5cf6; }
@@ -102,9 +99,10 @@
         .instruction-text { line-height: 1.9; white-space: pre-wrap; color: #4b5563; font-size: 15px; }
         .timer-link { color: #8b5cf6; font-weight: 600; text-decoration: none; cursor: pointer; background: #f5f3ff; padding: 3px 8px; border-radius: 8px; border: 1px solid #ddd6fe; }
         
-        /* Edit Buttons */
         .edit-btn { position: absolute; top: 15px; right: 15px; background: white; border: none; padding: 10px 20px; border-radius: 20px; font-weight: 600; box-shadow: 0 4px 15px rgba(0,0,0,0.1); cursor: pointer; color: #8b5cf6; z-index: 10; }
         
+        .btn-delete { background: var(--danger-gradient); color: white; border: none; padding: 15px; border-radius: 25px; width: 100%; font-weight: 600; margin-top: 40px; cursor: pointer; font-size: 14px; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3); }
+
         #active-timer { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #1f2937; color: white; padding: 15px 30px; border-radius: 50px; display: none; align-items: center; gap: 15px; z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
 
         @media print { .edit-btn, .action-bar, .calculator-box, .copy-btn, input[type="checkbox"] { display: none !important; } }
@@ -177,13 +175,16 @@
         <input type="url" id="editPhoto" style="width:100%; padding:14px; border-radius:15px; border:2px solid #f3e8ff;">
         
         <button onclick="saveChanges()" style="background:var(--primary-gradient); color:white; border:none; padding:18px; border-radius:25px; width:100%; font-weight:600; margin-top:30px; cursor:pointer; font-size: 16px;">WIJZIGINGEN OPSLAAN ✅</button>
+        
+        <button onclick="deleteRecipe()" class="btn-delete">RECEPT DEFINITIEF VERWIJDEREN 🗑️</button>
+        
         <button onclick="toggleEdit()" style="width:100%; border:none; background:none; color:#9ca3af; margin-top:20px; cursor:pointer;">Annuleren</button>
     </div>
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
     const firebaseConfig = { apiKey: "AIzaSyBzsxSTQKhhh8yKb4AFew7zQz26BMNKfHw", authDomain: "mijnkookapp2.firebaseapp.com", projectId: "mijnkookapp2", storageBucket: "mijnkookapp2.firebasestorage.app", messagingSenderId: "77365526386", appId: "1:77365526386:web:faa6d99632dae10b4d67eb" };
     const app = initializeApp(firebaseConfig); const db = getFirestore(app);
@@ -265,6 +266,7 @@
     };
 
     window.changeServings = (v) => { if(currS+v > 0) { currS+=v; document.getElementById('servingsDisplay').innerText=currS; renderIngs(); } };
+    
     window.toggleEdit = () => {
         const v = document.getElementById('viewMode'), e = document.getElementById('editMode');
         v.style.display = v.style.display === "none" ? "block" : "none";
@@ -282,6 +284,18 @@
             foto: document.getElementById('editPhoto').value
         });
         location.reload();
+    };
+
+    window.deleteRecipe = async () => {
+        const pw = prompt("Voer het wachtwoord in om te verwijderen:");
+        if (pw === "RSCA1908") {
+            if(confirm("Weet je zeker dat je dit recept wilt verwijderen?")) {
+                await deleteDoc(doc(db, "recepten", id));
+                window.location.href = "index.html";
+            }
+        } else if (pw !== null) {
+            alert("Fout wachtwoord!");
+        }
     };
 
     load();
